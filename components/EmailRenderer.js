@@ -18,7 +18,7 @@ const EmailRenderer = () => {
   const [toEmail, setToEmail] = useState(""); // Store the To email address
   const [subject, setSubject] = useState(""); // Store the Subject
   const [bhContent, setBhContent] = useState("");
-  const [bhValue, setBhValue] = useState("");
+  // const [bhValue, setBhValue] = useState("");
   const [highlightEnabled, setHighlightEnabled] = useState(false);
   const [highlightedTextMeta, setHighlightedTextMeta] = useState([]); // For meta fields
   const [highlightedTextBody, setHighlightedTextBody] = useState([]); // For body content
