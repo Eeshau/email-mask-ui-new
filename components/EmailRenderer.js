@@ -3,6 +3,9 @@ import PostalMime from "postal-mime";
 import crypto from "crypto-browserify";
 import { styles } from "./styles";
 
+import Steps from "./Steps";
+import NavBar from "./NavBar";
+
 // Helper function to escape special regex characters in the text
 const escapeRegExp = (string) => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special regex characters
@@ -25,6 +28,36 @@ const EmailRenderer = () => {
   const [hideFrom, setHideFrom] = useState(false);
   const [hideTo, setHideTo] = useState(false);
   const [hideSubject, setHideSubject] = useState(false);
+
+
+  const [activeSection, setActiveSection] = useState("change");
+
+  const handleCompareChanges = () => {
+    setActiveSection("compare");
+    console.log("Compare Changes Selected");
+  };
+
+  const handleResetChanges = () => {
+    setActiveSection("reset");
+
+    setHighlightedTextMeta([]); // Clear highlighted meta text
+    setHighlightedTextBody([]); // Clear highlighted body text
+    setHideFrom(false)
+    setHideTo(false)
+    setHideSubject(false)
+
+    // setActiveSection("change");
+  };
+
+  const handleChangeEmail = () => {
+    setActiveSection("change");
+    console.log("Change Email Selected");
+  };
+
+  const handleViewSteps = () => {
+    setActiveSection("steps");
+    console.log("View Steps Selected");
+  };
 
   // Update highlightedTextMeta when hide toggles change
   useEffect(() => {
@@ -245,6 +278,16 @@ useEffect(() => {
 
   return (
     <div style={styles.container}>
+
+    <NavBar
+        onCompareChanges={handleCompareChanges}
+        onResetChanges={handleResetChanges}
+        onChangeEmail={handleChangeEmail}
+        onViewSteps={handleViewSteps}
+        activeSection={activeSection}
+    />
+
+
       <h1>Email Renderer</h1>
       <div
         style={{
@@ -256,6 +299,9 @@ useEffect(() => {
           alignItems: "center",
         }}
       >
+
+        { activeSection === 'change' && (
+        <div>
         <div class="file-input-container">
           <label htmlFor="file-upload" class="file-input-label">
             Choose a file
@@ -268,6 +314,7 @@ useEffect(() => {
             onChange={handleFileUpload}
           />
         </div>
+        
 
         <textarea
           value={fileContent}
@@ -276,16 +323,18 @@ useEffect(() => {
           placeholder="Or paste .eml content here"
           className="textarea-floating"
         />
+        </div>
+      )}
       </div>
 
-      <div className="grid grid-cols-2"> 
-        <div>
+      <div className="grid grid-cols-6"> 
         {/* MASKED EMAIL SECTION */}
-        <h1 className="text-4xl">Masked Email</h1>
-
+        <div className={`grid ${activeSection === 'compare' ? 'col-span-3' : activeSection === 'change' ? 'col-span-6' : activeSection === 'steps' ? 'col-span-4' : activeSection === 'reset' ? 'col-span-6' : ''}`}>
         {/* Display From, To, and Subject fields */}
         {fileContent && (
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
+            <h1 className="text-4xl">Masked Email</h1>
+
             <div>
               <label>From:</label>
               <input
@@ -384,8 +433,9 @@ useEffect(() => {
         </div>
       </div>
 
-
       {/* ORIGINAL EMAIL SECTION */}
+
+      { activeSection === 'compare' &&  (
       <div>
         <h1 className="text-4xl">Original Email</h1>
         {fileContent && (
@@ -422,8 +472,17 @@ useEffect(() => {
           }}
           className="email-body-container"
         />
+        
       </div>
+      )}
+      
+
+      { activeSection === 'steps' ?  <div className="col-span-2"> <Steps/> </div>: null }
       </div>
+      
+
+
+      
   
     </div>
   );
