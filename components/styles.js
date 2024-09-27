@@ -1,3 +1,4 @@
+
 export const styles = {
   container: {
     display: "flex",
@@ -21,12 +22,13 @@ export const styles = {
   },
   rawContent: {
     width: '100%',
-    border: '2px solid #ddd',
+    border: '2px solid #222325',
     borderRadius: 5,
     flexBasis: "100%",
     padding: "10px",
     height: "100%",
     overflow: "auto",
+    fontWeight: 200,
   },
   emailbody: {
     // border: "1px solid #ccc",

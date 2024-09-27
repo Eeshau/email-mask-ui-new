@@ -18,13 +18,14 @@ const NavBar: React.FC<NavBarProps> = ({
   return (
     <div className="flex justify-between items-center px-6 py-2 w-full font-sans">
       {/* Left Side */}
-      <div className="flex items-center space-x-4 bg-[#26272E] px-4 py-2 rounded-md shadow-lg">
-        <div className="text-white font-semibold">
-          ZK Whistleblower
+      <div className="flex items-center space-x-4 bg-[#26272E] px-4 py-2 rounded-md shadow-lg border border-[1px] border-solid border-[#2D2F31]">
+        <div className="text-white font-200">
+          <span className="font-semibold">ZK </span> 
+          Whistleblower
         </div>
 
         {/* Divider between Whistleblower and Verify */}
-        <div className="border-l border-gray-600 h-6 mx-2 mx-2 h-full"></div>
+        <div className="border-l border-gray-600 h-6 mx-2 mx-2"></div>
 
         <button
           className={`px-4 py-2 rounded-md ${
@@ -41,7 +42,7 @@ const NavBar: React.FC<NavBarProps> = ({
       <div className="flex-1" />
 
       {/* Right Side */}
-      <div className="flex items-center space-x-0 bg-[#26272E] px-4 py-2 rounded-[10px] shadow-lg">
+      <div className="flex items-center space-x-0 bg-[#26272E] px-4 py-2 rounded-[10px] shadow-lg border border-[1px] border-solid border-[#2D2F31]">
         <button
           onClick={onCompareChanges}
           className={`px-4 py-2 rounded-l-md ${
