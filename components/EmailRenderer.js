@@ -278,95 +278,153 @@ useEffect(() => {
         />
       </div>
 
-      {/* Display From, To, and Subject fields */}
-      {fileContent && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
-          <div>
-            <label>From:</label>
-            <input
-              type="checkbox"
-              checked={hideFrom}
-              onChange={() => setHideFrom(!hideFrom)}
-            />
-            <div style={styles.input}>
-              {getHighlightedContent(fromEmail, highlightedTextMeta)}
+      <div className="grid grid-cols-2"> 
+        <div>
+        {/* MASKED EMAIL SECTION */}
+        <h1 className="text-4xl">Masked Email</h1>
+
+        {/* Display From, To, and Subject fields */}
+        {fileContent && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
+            <div>
+              <label>From:</label>
+              <input
+                type="checkbox"
+                checked={hideFrom}
+                onChange={() => setHideFrom(!hideFrom)}
+              />
+              <div style={styles.input}>
+                {getHighlightedContent(fromEmail, highlightedTextMeta)}
+              </div>
+            </div>
+            <div>
+              <label>To:</label>
+              <input
+                type="checkbox"
+                checked={hideTo}
+                onChange={() => setHideTo(!hideTo)}
+              />
+              <div style={styles.input}>
+                {getHighlightedContent(toEmail, highlightedTextMeta)}
+              </div>
+            </div>
+            <div>
+              <label>Subject:</label>
+              <input
+                type="checkbox"
+                checked={hideSubject}
+                onChange={() => setHideSubject(!hideSubject)}
+              />
+              <div style={styles.input}>
+                {getHighlightedContent(subject, highlightedTextMeta)}
+              </div>
+            </div>
+            <div>
+              <label>Body:</label>
             </div>
           </div>
-          <div>
-            <label>To:</label>
-            <input
-              type="checkbox"
-              checked={hideTo}
-              onChange={() => setHideTo(!hideTo)}
-            />
-            <div style={styles.input}>
-              {getHighlightedContent(toEmail, highlightedTextMeta)}
-            </div>
-          </div>
-          <div>
-            <label>Subject:</label>
-            <input
-              type="checkbox"
-              checked={hideSubject}
-              onChange={() => setHideSubject(!hideSubject)}
-            />
-            <div style={styles.input}>
-              {getHighlightedContent(subject, highlightedTextMeta)}
-            </div>
-          </div>
-          <div>
-            <label>Body:</label>
-          </div>
-        </div>
-      )}
+        )}
 
       {fileContent ? (
+        <div
+        style={{
+          position: "fixed",  // Change from 'absolute' to 'fixed' to make the buttons sticky
+          bottom: "20px",     // Keep them 20px from the bottom of the viewport
+          left: "50%",        
+          transform: "translateX(-50%)", 
+          display: "flex",
+          flexDirection: "row",
+          gap: "1rem",
+          zIndex: 1000,      
+          backgroundColor: "#fff",
+          padding: "10px",  
+          borderRadius: "5px", 
+          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"  
+        }}
+      >
+      <button
+        onClick={() => setHighlightEnabled(!highlightEnabled)}
+        className="button"
+      >
+        {highlightEnabled ? "Disable Highlighter" : "Enable Highlighter"}
+      </button>
+      <button
+        onClick={() => setShowEMLPreview(!showEMLPreview)}
+        className="button"
+      >
+        {showEMLPreview ? "Switch to Raw EML" : "Switch to EML Preview"}
+      </button>
+    </div>
+      ) : null}
+
+
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            gap: "1rem",
+            height: "50vh",
+            margin: "1rem",
           }}
         >
-          <button
-            onClick={() => setHighlightEnabled(!highlightEnabled)}
-            className="button"
-          >
-            {highlightEnabled ? "Disable Highlighter" : "Enable Highlighter"}
-          </button>
-          <button
-            onClick={() => setShowEMLPreview(!showEMLPreview)}
-            className="button"
-          >
-            {showEMLPreview ? "Switch to Raw EML" : "Switch to EML Preview"}
-          </button>
+          {showEMLPreview && bhContent ? (
+            <div style={styles.rawContent}>
+              <h2>Content used for bh</h2>
+
+              <pre>{getHighlightedContent(bhContent, highlightedTextBody)}</pre>
+            </div>
+          ) : (
+            <div
+              style={styles.emailBody}
+              dangerouslySetInnerHTML={{
+                __html: getHighlightedContentHTML(emailBody),
+              }}
+              className="email-body-container"
+            />
+          )}
         </div>
-      ) : null}
-
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          height: "50vh",
-          margin: "1rem",
-        }}
-      >
-        {showEMLPreview && bhContent ? (
-          <div style={styles.rawContent}>
-            <h2>Content used for bh</h2>
-
-            <pre>{getHighlightedContent(bhContent, highlightedTextBody)}</pre>
-          </div>
-        ) : (
-          <div
-            style={styles.emailBody}
-            dangerouslySetInnerHTML={{
-              __html: getHighlightedContentHTML(emailBody),
-            }}
-            className="email-body-container"
-          />
-        )}
       </div>
+
+
+      {/* ORIGINAL EMAIL SECTION */}
+      <div>
+        <h1 className="text-4xl">Original Email</h1>
+        {fileContent && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
+            <div>
+              <label>From:</label>
+              <div style={styles.input}>
+                {fromEmail}
+              </div>
+            </div>
+            <div>
+              <label>To:</label>
+              <div style={styles.input}>
+                {toEmail}
+              </div>
+            </div>
+            <div>
+              <label>Subject:</label>
+              <div style={styles.input}>
+                {subject}
+              </div>
+            </div>
+            <div>
+              <label>Body:</label>
+            </div>
+          </div>
+        )}
+
+        {/* Original Body Content without highlights */}
+        <div
+          style={styles.emailBody}
+          dangerouslySetInnerHTML={{
+            __html: emailBody,
+          }}
+          className="email-body-container"
+        />
+      </div>
+      </div>
+  
     </div>
   );
 };
