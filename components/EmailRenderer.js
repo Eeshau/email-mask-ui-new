@@ -21,6 +21,41 @@ const EmailRenderer = () => {
   const [highlightedTextBody, setHighlightedTextBody] = useState([]); // For body content
   const [showEMLPreview, setShowEMLPreview] = useState(false); // Toggle between raw EML and preview
 
+  // States for hiding "From", "To", and "Subject"
+  const [hideFrom, setHideFrom] = useState(false);
+  const [hideTo, setHideTo] = useState(false);
+  const [hideSubject, setHideSubject] = useState(false);
+
+  // Update highlightedTextMeta when hide toggles change
+  useEffect(() => {
+    const updatedMetaHighlights = new Set([...highlightedTextMeta]);
+  
+    // Add or remove "From" email based on checkbox
+    if (hideFrom) {
+      updatedMetaHighlights.add(fromEmail);
+    } else {
+      updatedMetaHighlights.delete(fromEmail);
+    }
+  
+    // Add or remove "To" email based on checkbox
+    if (hideTo) {
+      updatedMetaHighlights.add(toEmail);
+    } else {
+      updatedMetaHighlights.delete(toEmail);
+    }
+  
+    // Add or remove "Subject" based on checkbox
+    if (hideSubject) {
+      updatedMetaHighlights.add(subject);
+    } else {
+      updatedMetaHighlights.delete(subject);
+    }
+  
+    setHighlightedTextMeta([...updatedMetaHighlights]);
+  }, [hideFrom, hideTo, hideSubject, fromEmail, toEmail, subject]);
+  
+
+
   // Handle selection for meta and body text separately, checks wether the user is hihglighting the body or the meta (to,from, subject of the email)
   // check this seperatly because one should be text(the meta) and the other might be html content(the body)
 useEffect(() => {
@@ -248,18 +283,33 @@ useEffect(() => {
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
           <div>
             <label>From:</label>
+            <input
+              type="checkbox"
+              checked={hideFrom}
+              onChange={() => setHideFrom(!hideFrom)}
+            />
             <div style={styles.input}>
               {getHighlightedContent(fromEmail, highlightedTextMeta)}
             </div>
           </div>
           <div>
             <label>To:</label>
+            <input
+              type="checkbox"
+              checked={hideTo}
+              onChange={() => setHideTo(!hideTo)}
+            />
             <div style={styles.input}>
               {getHighlightedContent(toEmail, highlightedTextMeta)}
             </div>
           </div>
           <div>
             <label>Subject:</label>
+            <input
+              type="checkbox"
+              checked={hideSubject}
+              onChange={() => setHideSubject(!hideSubject)}
+            />
             <div style={styles.input}>
               {getHighlightedContent(subject, highlightedTextMeta)}
             </div>
