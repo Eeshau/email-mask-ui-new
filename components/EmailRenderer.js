@@ -266,7 +266,7 @@ useEffect(() => {
       const regex = new RegExp(`(?!<[^>]*?)(${text})(?![^<]*?>)`, "gi");
       highlightedContent = highlightedContent.replace(
         regex,
-        '<span class="highlight">$1</span>'
+        '<span class="highlightBody">$1</span>'
       );
     });
 
@@ -296,6 +296,7 @@ useEffect(() => {
           gap: "1rem",
           alignItems: "center",
         }}
+        className="font-sans"
       >
 
         { activeSection === 'change' && (
@@ -325,9 +326,9 @@ useEffect(() => {
       )}
       </div>
 
-      <div className="grid grid-cols-6 gap-1"> 
+      <div className="grid grid-cols-6 gap-1 w-full font-sans"> 
         {/* MASKED EMAIL SECTION */}
-        <div className={`grid ${activeSection === 'compare' ? 'col-span-3' : activeSection === 'change' ? 'col-span-6' : activeSection === 'steps' ? 'col-span-4' : activeSection === 'reset' ? 'col-span-6' : ''}`}>
+        <div className={`${activeSection === 'compare' ? 'col-span-3' : activeSection === 'change' ? 'col-span-6' : activeSection === 'steps' ? 'col-span-4' : activeSection === 'reset' ? 'col-span-6' : ''}`}>
         {/* Display From, To, and Subject fields */}
         {fileContent && (
           <div className="bg-[#141517] text-white rounded-lg p-6" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
@@ -340,13 +341,13 @@ useEffect(() => {
                   {getHighlightedContent(fromEmail, highlightedTextMeta)}
                 </div>
               </div>
-              <div className="flex">
+              <div className="flex gap-2">
                 <input
                   type="checkbox"
                   checked={hideFrom}
                   onChange={() => setHideFrom(!hideFrom)}
                 />
-                <p className="text-gray">Hide all</p>
+                <p className="text-gray font-sans">Hide all</p>
               </div>
             </div>
 
@@ -357,13 +358,13 @@ useEffect(() => {
                   {getHighlightedContent(toEmail, highlightedTextMeta)}
                 </div>
               </div>
-              <div className="flex">
+              <div className="flex gap-2">
                 <input
                   type="checkbox"
                   checked={hideTo}
                   onChange={() => setHideTo(!hideTo)}
                 />
-                <p className="text-gray">Hide all</p>
+                <p className="text-gray font-sans">Hide all</p>
               </div>
             </div>
 
@@ -374,13 +375,13 @@ useEffect(() => {
                   {getHighlightedContent(subject, highlightedTextMeta)}
                 </div>
               </div>
-              <div className="flex">
+              <div className="flex gap-2">
                 <input
                   type="checkbox"
                   checked={hideSubject}
                   onChange={() => setHideSubject(!hideSubject)}
                 />
-                <p className="text-gray">Hide all</p>
+                <p className="text-gray font-sans">Hide all</p>
               </div>
             </div>
             <div>
@@ -398,27 +399,46 @@ useEffect(() => {
           transform: "translateX(-50%)", 
           display: "flex",
           flexDirection: "row",
+          alignItems: "center",  // Align items vertically in the center
           gap: "1rem",
           zIndex: 1000,      
-          backgroundColor: "#fff",
+          backgroundColor: "#26272E",
           padding: "10px",  
-          borderRadius: "5px", 
+          borderRadius: "12px", 
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"  
         }}
       >
-      <button
-        onClick={() => setHighlightEnabled(!highlightEnabled)}
-        className="button"
-      >
-        {highlightEnabled ? "Disable Highlighter" : "Enable Highlighter"}
-      </button>
-      <button
-        onClick={() => setShowEMLPreview(!showEMLPreview)}
-        className="button"
-      >
-        {showEMLPreview ? "Switch to Raw EML" : "Switch to EML Preview"}
-      </button>
-    </div>
+        <button
+          onClick={() => setHighlightEnabled(!highlightEnabled)}
+          className="button font-sans flex items-center"
+        >
+            <span className="mr-2">
+            {/* Replace this with your SVG code */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" viewBox="0 0 48 24" fill="none">
+              <rect width="48" height="24" rx="12" fill={highlightEnabled ? "#26A544" : "#300000"} />
+              <circle cx={highlightEnabled ? "35" : "13"} cy="12" r="9" fill="#D9D9D9"/>
+            </svg>
+          </span>
+          {highlightEnabled ? "Disable Highlighter" : "Enable Highlighter"}
+        </button>
+
+        {/* Divider */}
+        <div
+          style={{
+            height: "24px",       // Adjust height of the divider as needed
+            width: "1px",
+            backgroundColor: "#444",  // Divider color
+          }}
+        ></div>
+
+        <button
+          onClick={() => setShowEMLPreview(!showEMLPreview)}
+          className="button font-sans"
+        >
+          {showEMLPreview ? "Switch to Raw EML" : "Switch to EML Preview"}
+        </button>
+      </div>
+
       ) : null}
 
 
@@ -438,7 +458,7 @@ useEffect(() => {
             </div>
           ) : (
             <div
-              style={styles.emailBody}
+              style={styles.emailbody}
               dangerouslySetInnerHTML={{
                 __html: getHighlightedContentHTML(emailBody),
               }}

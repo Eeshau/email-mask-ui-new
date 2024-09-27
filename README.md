@@ -41,3 +41,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - things i added
 - npm i postal-mime
 - npm i crypto-browserify
+- npm install @next/font

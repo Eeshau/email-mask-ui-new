@@ -29,7 +29,7 @@ export const styles = {
     overflow: "auto",
   },
   emailbody: {
-    border: "1px solid #ccc",
+    // border: "1px solid #ccc",
     borderRadius: 4,
     flexBasis: "100%",
     width: '40vw',
@@ -56,6 +56,6 @@ export const styles = {
   },
   byte: {
     marginRight: "2px",
-    fontFamily: "monospace",
+    // fontFamily: "monospace",
   },
 };

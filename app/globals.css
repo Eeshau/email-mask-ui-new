@@ -1,9 +1,14 @@
+/* styles/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-family: 'var(--font-space-grotesk)', sans-serif;
+}
+
 :root {
-  --background: #ffffff;
+  --background: #0F1112;
   --foreground: #171717;
 }
 
@@ -14,10 +19,11 @@
   }
 }
 
+
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'var(--font-space-grotesk)', sans-serif; /* Removed Arial fallback */
 }
 
 @layer utilities {
@@ -27,14 +33,20 @@ body {
 }
 
 
+.highlightBody{
+  background-color: black;
+}
+
+
 .highlight {
   background-color: black;
+  color: black;
   /* You can change the highlight color here */
 
 }
 
 .highlight:hover {
-  color: white
+  color: grey
 }
 
 .field-container {
@@ -82,7 +94,7 @@ body {
   font-size: 16px;
   font-weight: 500;
   color: #fff;
-  background-color: #6200EA;
+  background-color: #26272E;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -102,7 +114,7 @@ body {
 
 .button:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.4);
+  /* box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.4); */
 }
 
 .file-input-container {
