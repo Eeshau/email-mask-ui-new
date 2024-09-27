@@ -287,8 +287,6 @@ useEffect(() => {
         activeSection={activeSection}
     />
 
-
-      <h1>Email Renderer</h1>
       <div
         style={{
           display: "flex",
@@ -327,45 +325,62 @@ useEffect(() => {
       )}
       </div>
 
-      <div className="grid grid-cols-6"> 
+      <div className="grid grid-cols-6 gap-1"> 
         {/* MASKED EMAIL SECTION */}
         <div className={`grid ${activeSection === 'compare' ? 'col-span-3' : activeSection === 'change' ? 'col-span-6' : activeSection === 'steps' ? 'col-span-4' : activeSection === 'reset' ? 'col-span-6' : ''}`}>
         {/* Display From, To, and Subject fields */}
         {fileContent && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
-            <h1 className="text-4xl">Masked Email</h1>
+          <div className="bg-[#141517] text-white rounded-lg p-6" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
+            <h1 className="text-4xl text-center">Masked Email</h1>
 
-            <div>
-              <label>From:</label>
-              <input
-                type="checkbox"
-                checked={hideFrom}
-                onChange={() => setHideFrom(!hideFrom)}
-              />
-              <div style={styles.input}>
-                {getHighlightedContent(fromEmail, highlightedTextMeta)}
+            <div className="flex justify-between items-center border-b border-gray-700 py-2">
+              <div className="flex">
+                <label className="w-[80px]">From:</label>
+                <div style={styles.input}>
+                  {getHighlightedContent(fromEmail, highlightedTextMeta)}
+                </div>
+              </div>
+              <div className="flex">
+                <input
+                  type="checkbox"
+                  checked={hideFrom}
+                  onChange={() => setHideFrom(!hideFrom)}
+                />
+                <p className="text-gray">Hide all</p>
               </div>
             </div>
-            <div>
-              <label>To:</label>
-              <input
-                type="checkbox"
-                checked={hideTo}
-                onChange={() => setHideTo(!hideTo)}
-              />
-              <div style={styles.input}>
-                {getHighlightedContent(toEmail, highlightedTextMeta)}
+
+            <div className="flex justify-between items-center border-b border-gray-700 py-2">
+              <div className="flex">
+                <label className="w-[80px]">To:</label>    
+                <div style={styles.input}>
+                  {getHighlightedContent(toEmail, highlightedTextMeta)}
+                </div>
+              </div>
+              <div className="flex">
+                <input
+                  type="checkbox"
+                  checked={hideTo}
+                  onChange={() => setHideTo(!hideTo)}
+                />
+                <p className="text-gray">Hide all</p>
               </div>
             </div>
-            <div>
-              <label>Subject:</label>
-              <input
-                type="checkbox"
-                checked={hideSubject}
-                onChange={() => setHideSubject(!hideSubject)}
-              />
-              <div style={styles.input}>
-                {getHighlightedContent(subject, highlightedTextMeta)}
+
+            <div className="flex justify-between items-center border-b border-gray-700 py-2">
+              <div className="flex">
+                <label className="w-[80px]">Subject:</label>
+                <div style={styles.input}>
+                  {getHighlightedContent(subject, highlightedTextMeta)}
+                </div>
+              </div>
+              <div className="flex">
+                <input
+                  type="checkbox"
+                  checked={hideSubject}
+                  onChange={() => setHideSubject(!hideSubject)}
+                />
+                <p className="text-gray">Hide all</p>
               </div>
             </div>
             <div>
@@ -436,26 +451,32 @@ useEffect(() => {
       {/* ORIGINAL EMAIL SECTION */}
 
       { activeSection === 'compare' &&  (
-      <div>
-        <h1 className="text-4xl">Original Email</h1>
+      <div className="col-span-3">
         {fileContent && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
-            <div>
-              <label>From:</label>
+          <div className="bg-[#141517] text-white rounded-lg p-6" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
+            <h1 className="text-4xl text-center">Original Email</h1>
+            <div className="flex justify-between items-center border-b border-gray-700 py-2">
+              <div className="flex">
+              <label className="w-[80px]">From:</label>
               <div style={styles.input}>
                 {fromEmail}
               </div>
-            </div>
-            <div>
-              <label>To:</label>
-              <div style={styles.input}>
-                {toEmail}
               </div>
             </div>
-            <div>
-              <label>Subject:</label>
-              <div style={styles.input}>
-                {subject}
+            <div className="flex justify-between items-center border-b border-gray-700 py-2">
+              <div className="flex">
+                <label className="w-[80px]">To:</label>
+                <div style={styles.input}>
+                  {toEmail}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between items-center border-b border-gray-700 py-2">
+              <div className="flex">
+                <label className="w-[80px]">Subject:</label>
+                <div style={styles.input}>
+                  {subject}
+                </div>
               </div>
             </div>
             <div>
