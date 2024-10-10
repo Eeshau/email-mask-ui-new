@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface NavBarProps {
   onCompareChanges: () => void;
@@ -15,17 +15,19 @@ const NavBar: React.FC<NavBarProps> = ({
   onViewSteps,
   activeSection,
 }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   return (
-    <div className="flex justify-between items-center px-6 py-2 w-full font-sans">
+    <div className="flex justify-between items-center  py-2 w-full font-sans">
       {/* Left Side */}
-      <div className="flex items-center space-x-4 bg-[#26272E] px-4 py-2 rounded-md shadow-lg border border-[1px] border-solid border-[#2D2F31]">
+      <div className="flex items-center space-x-4 bg-[#161819] px-4 py-1 rounded-[8px] shadow-lg border border-[#3B3B3B]">
         <div className="text-white font-200">
-          <span className="font-semibold">ZK </span> 
+          <span className="font-semibold">ZK </span>
           Whistleblower
         </div>
 
         {/* Divider between Whistleblower and Verify */}
-        <div className="border-l border-gray-600 h-6 mx-2 mx-2"></div>
+        <div className="border-l border-gray-600 h-6 mx-2"></div>
 
         <button
           className={`px-4 py-2 rounded-md ${
@@ -41,14 +43,14 @@ const NavBar: React.FC<NavBarProps> = ({
       {/* Transparent Spacer */}
       <div className="flex-1" />
 
-      {/* Right Side */}
-      <div className="flex items-center space-x-0 bg-[#26272E] px-4 py-2 rounded-[10px] shadow-lg border border-[1px] border-solid border-[#2D2F31]">
+      {/* Right Side - Desktop */}
+      <div className="hidden lg:flex items-center space-x-0 bg-[#161819] px-4 py-1 rounded-[8px] shadow-lg border border-[#3B3B3B]">
         <button
           onClick={onCompareChanges}
           className={`px-4 py-2 rounded-l-md ${
             activeSection === "compare"
-              ? " text-white font-semibold"
-              : "text-gray-400  hover:text-white"
+              ? "text-white font-semibold"
+              : "text-gray-400 hover:text-white"
           }`}
         >
           Compare changes
@@ -56,9 +58,9 @@ const NavBar: React.FC<NavBarProps> = ({
         <div className="border-l border-gray-600 h-6 mx-2"></div>
         <button
           onClick={onResetChanges}
-          className={`px-4 py-2  ${
+          className={`px-4 py-2 ${
             activeSection === "reset"
-              ? " text-white font-semibold"
+              ? "text-white font-semibold"
               : "text-gray-400 hover:text-white"
           }`}
         >
@@ -67,25 +69,123 @@ const NavBar: React.FC<NavBarProps> = ({
         <div className="border-l border-gray-600 h-6 mx-2"></div>
         <button
           onClick={onChangeEmail}
-          className={`px-4 py-2  ${
+          className={`px-4 py-2 ${
             activeSection === "change"
-              ? " text-white font-semibold"
+              ? "text-white font-semibold"
               : "text-gray-400 hover:text-white"
           }`}
         >
           Change Email
         </button>
-        <div className="border-l border-gray-600 h-6 center mx-2"></div>
+        <div className="border-l border-gray-600 h-6 mx-2"></div>
         <button
           onClick={onViewSteps}
           className={`px-4 py-2 rounded-r-md ${
             activeSection === "steps"
-              ? " text-white font-semibold"
+              ? "text-white font-semibold"
               : "text-gray-400 hover:text-white"
           }`}
         >
           View Steps
         </button>
+      </div>
+
+      {/* Right Side - Mobile */}
+      <div className="relative lg:hidden">
+        <button
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          className="flex items-center bg-[#161819] px-4 py-3 rounded-[8px] shadow-lg border border-[#3B3B3B] text-gray-400 hover:text-white"
+        >
+          {/* Display the active section name */}
+          {(() => {
+            switch (activeSection) {
+              case "compare":
+                return "Compare changes";
+              case "reset":
+                return "Reset changes";
+              case "change":
+                return "Change Email";
+              case "steps":
+                return "View Steps";
+              default:
+                return "Menu";
+            }
+          })()}
+          {/* Dropdown arrow icon */}
+          <svg
+            className={`w-4 h-4 ml-2 transform ${
+              isDropdownOpen ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M19 9l-7 7-7-7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+            />
+          </svg>
+        </button>
+
+        {/* Dropdown Menu */}
+        {isDropdownOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-[#161819] rounded-[8px] shadow-lg border border-[#3B3B3B] z-10">
+            <button
+              onClick={() => {
+                onCompareChanges();
+                setIsDropdownOpen(false);
+              }}
+              className={`block w-full text-left px-4 py-2 ${
+                activeSection === "compare"
+                  ? "text-white font-semibold"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              Compare changes
+            </button>
+            <button
+              onClick={() => {
+                onResetChanges();
+                setIsDropdownOpen(false);
+              }}
+              className={`block w-full text-left px-4 py-2 ${
+                activeSection === "reset"
+                  ? "text-white font-semibold"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              Reset changes
+            </button>
+            <button
+              onClick={() => {
+                onChangeEmail();
+                setIsDropdownOpen(false);
+              }}
+              className={`block w-full text-left px-4 py-2 ${
+                activeSection === "change"
+                  ? "text-white font-semibold"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              Change Email
+            </button>
+            <button
+              onClick={() => {
+                onViewSteps();
+                setIsDropdownOpen(false);
+              }}
+              className={`block w-full text-left px-4 py-2 ${
+                activeSection === "steps"
+                  ? "text-white font-semibold"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              View Steps
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

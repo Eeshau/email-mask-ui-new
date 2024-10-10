@@ -93,7 +93,7 @@ body {
 .textarea-floating:not(:placeholder-shown)+label {
   top: 0;
   font-size: 12px;
-  color: #6200EA;
+  color: #CCE0EA;
 }
 
 
@@ -110,7 +110,7 @@ body {
 }
 
 .button:hover {
-  background-color: #4B00B5;
+  background-color: #282828;
 }
 
 .button:active {
@@ -129,14 +129,17 @@ body {
 }
 
 .file-input-label {
-  display: inline-block;
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 5px;
   padding: 10px 20px;
   font-size: 16px;
   font-weight: 500;
-  color: #fff;
-  background-color: #6200EA;
+  color: #161819;
+  background-color: #CCE0EA;
   border: none;
-  border-radius: 5px;
+  border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -203,4 +206,9 @@ border-width: 0 2px 2px 0;
 transform: rotate(45deg);
 top: 2px;
 left: 6px;
+}
+
+
+ul {
+  font-size: small;
 }

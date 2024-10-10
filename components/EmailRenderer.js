@@ -299,7 +299,7 @@ useEffect(() => {
         style={{
           display: "flex",
           flexDirection: "column",
-          margin: "3rem 5rem",
+          margin: "1rem 5rem",
           minWidth: "70vw",
           gap: "1rem",
           alignItems: "center",
@@ -324,7 +324,11 @@ useEffect(() => {
           <div class="file-input-container">
             <label htmlFor="file-upload" class="file-input-label">
               Choose a file
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M13.3538 5.14625L9.85375 1.64625C9.80728 1.59983 9.75212 1.56303 9.69143 1.53793C9.63073 1.51284 9.56568 1.49995 9.5 1.5H3.5C3.23478 1.5 2.98043 1.60536 2.79289 1.79289C2.60536 1.98043 2.5 2.23478 2.5 2.5V13.5C2.5 13.7652 2.60536 14.0196 2.79289 14.2071C2.98043 14.3946 3.23478 14.5 3.5 14.5H12.5C12.7652 14.5 13.0196 14.3946 13.2071 14.2071C13.3946 14.0196 13.5 13.7652 13.5 13.5V5.5C13.5001 5.43432 13.4872 5.36927 13.4621 5.30858C13.437 5.24788 13.4002 5.19272 13.3538 5.14625ZM10 3.20688L11.7931 5H10V3.20688ZM12.5 13.5H3.5V2.5H9V5.5C9 5.63261 9.05268 5.75979 9.14645 5.85355C9.24021 5.94732 9.36739 6 9.5 6H12.5V13.5ZM9.85375 8.64625C9.90021 8.6927 9.93706 8.74786 9.9622 8.80855C9.98734 8.86925 10.0003 8.9343 10.0003 9C10.0003 9.0657 9.98734 9.13075 9.9622 9.19145C9.93706 9.25214 9.90021 9.3073 9.85375 9.35375C9.8073 9.40021 9.75214 9.43706 9.69145 9.4622C9.63075 9.48734 9.5657 9.50028 9.5 9.50028C9.4343 9.50028 9.36925 9.48734 9.30855 9.4622C9.24786 9.43706 9.1927 9.40021 9.14625 9.35375L8.5 8.70687V11.5C8.5 11.6326 8.44732 11.7598 8.35355 11.8536C8.25979 11.9473 8.13261 12 8 12C7.86739 12 7.74021 11.9473 7.64645 11.8536C7.55268 11.7598 7.5 11.6326 7.5 11.5V8.70687L6.85375 9.35375C6.8073 9.40021 6.75214 9.43706 6.69145 9.4622C6.63075 9.48734 6.5657 9.50028 6.5 9.50028C6.4343 9.50028 6.36925 9.48734 6.30855 9.4622C6.24786 9.43706 6.1927 9.40021 6.14625 9.35375C6.09979 9.3073 6.06294 9.25214 6.0378 9.19145C6.01266 9.13075 5.99972 9.0657 5.99972 9C5.99972 8.9343 6.01266 8.86925 6.0378 8.80855C6.06294 8.74786 6.09979 8.6927 6.14625 8.64625L7.64625 7.14625C7.69269 7.09976 7.74783 7.06288 7.80853 7.03772C7.86923 7.01256 7.93429 6.99961 8 6.99961C8.06571 6.99961 8.13077 7.01256 8.19147 7.03772C8.25217 7.06288 8.30731 7.09976 8.35375 7.14625L9.85375 8.64625Z" fill="#161819"/>
+              </svg>
             </label>
+
             <input
               id="file-upload"
               class="file-input"
@@ -339,11 +343,11 @@ useEffect(() => {
 
       <div className="grid grid-cols-6 gap-4 w-full font-sans "> 
         {/* MASKED EMAIL SECTION */}
-        <div className={ `border border-[1px] border-solid border-[#222325] bg-[#141517] rounded-[24px] ${activeSection === 'compare' ? 'col-span-3' : activeSection === 'change' ? 'col-span-6' : activeSection === 'steps' ? 'col-span-4' : activeSection === 'reset' ? 'col-span-6' : ''}`}>
+        <div className={ `border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] rounded-[12px]  ${activeSection === 'compare' ? 'col-span-6 sm:col-span-3' : activeSection === 'change' ? 'col-span-6' : activeSection === 'steps' ? 'col-span-6 sm:col-span-4' : activeSection === 'reset' ? 'col-span-6' : ''}`}>
         {/* Display From, To, and Subject fields */}
         {fileContent && (
           <div className=" text-white p-6" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
-            <h1 className="text-4xl text-center">Masked Email</h1>
+            {activeSection == "compare" ? <h1 className="text-xl text-center">Masked Email</h1> : null}
 
             <div className="flex justify-between items-center border-b border-gray-700 py-2">
               <div className="flex">
@@ -544,10 +548,10 @@ useEffect(() => {
 
       {/* ORIGINAL EMAIL SECTION */}
       { activeSection === 'compare' &&  (
-      <div className="col-span-3 border border-[1px] border-solid border-[#222325] bg-[#141517] rounded-[24px]">
+      <div className="col-span-6 sm:col-span-3 border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] rounded-[12px]">
         {fileContent && (
           <div className="text-white p-6" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
-            <h1 className="text-4xl text-center">Original Email</h1>
+            <h1 className="text-xl text-center">Original Email</h1>
             <div className="flex justify-between items-center border-b border-gray-700 py-2">
               <div className="flex">
               <label className="w-[80px]">From:</label>
@@ -607,7 +611,7 @@ useEffect(() => {
       )}
       
 
-      { activeSection === 'steps' ?  <div className="col-span-2"> <Steps/> </div>: null }
+      { activeSection === 'steps' ?  <div className="col-span-6 sm:col-span-2  order-first sm:order-2"> <Steps/> </div>: null }
       </div>
       
 
