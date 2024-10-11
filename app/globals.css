@@ -62,9 +62,7 @@ body {
 
 .textarea-floating {
   width: 100%;
-  font-size: 16px;
   border:   1px solid #222325;
-
   border-radius: 12px;
   background-color: #141517;
   color: #A3A3A3;
@@ -82,7 +80,6 @@ body {
   position: absolute;
   top: 50%;
   left: 15px;
-  font-size: 16px;
   color: #aaa;
   pointer-events: none;
   transform: translateY(-50%);
@@ -92,15 +89,14 @@ body {
 .textarea-floating:focus+label,
 .textarea-floating:not(:placeholder-shown)+label {
   top: 0;
-  font-size: 12px;
   color: #CCE0EA;
 }
 
 
 .button {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: 500;
+  width: fit-content;
+  padding: 10px;
+  /* font-weight: 500; */
   color: #fff;
   background-color: #26272E;
   border: none;
@@ -134,7 +130,6 @@ body {
   align-items: center;
   gap: 5px;
   padding: 10px 20px;
-  font-size: 16px;
   font-weight: 500;
   color: #161819;
   background-color: #CCE0EA;

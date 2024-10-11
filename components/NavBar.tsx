@@ -18,19 +18,19 @@ const NavBar: React.FC<NavBarProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <div className="flex justify-between items-center  py-2 w-full font-sans">
+    <div className="flex justify-between items-center  py-2 w-full font-sans text-[10px] sm:text-[14px]">
       {/* Left Side */}
-      <div className="flex items-center space-x-4 bg-[#161819] px-4 py-1 rounded-[8px] shadow-lg border border-[#3B3B3B]">
+      <div className="flex items-center space-x-1 sm:space-x-4 bg-[#161819] px-2 sm:px-4 py-1 rounded-[8px] shadow-lg border border-[#3B3B3B] whitespace-nowrap">
         <div className="text-white font-200">
           <span className="font-semibold">ZK </span>
           Whistleblower
         </div>
 
         {/* Divider between Whistleblower and Verify */}
-        <div className="border-l border-gray-600 h-6 mx-2"></div>
+        <div className="border-l border-gray-600 h-6 mx-1 sm:mx-2"></div>
 
         <button
-          className={`px-4 py-2 rounded-md ${
+          className={`px-2 sm:px-4 py-2 rounded-md ${
             activeSection === "verify"
               ? "text-white font-semibold"
               : "text-gray-400 hover:text-white"
@@ -94,7 +94,7 @@ const NavBar: React.FC<NavBarProps> = ({
       <div className="relative lg:hidden">
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex items-center bg-[#161819] px-4 py-3 rounded-[8px] shadow-lg border border-[#3B3B3B] text-gray-400 hover:text-white"
+          className="flex items-center bg-[#161819] px-4 py-3 rounded-[8px] shadow-lg border border-[#3B3B3B] text-gray-400 hover:text-white whitespace-nowrap"
         >
           {/* Display the active section name */}
           {(() => {
