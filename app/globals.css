@@ -32,6 +32,20 @@ body {
   }
 }
 
+/* globals.css */
+.bg-noise {
+  background-image: url('/noiseBackground.png');
+  background-size: cover;
+  background-position: center;
+  /* opacity: 0.15; */
+}
+
+.gradient-noise {
+  /* opacity: 0.7; */
+  background-blend-mode: overlay;
+}
+
+
 .divider {
   height: "24px";       
   width: "1px";
@@ -121,7 +135,7 @@ body {
 .file-input-container {
   position: relative;
   display: inline-block;
-  width: 100%;
+  width: auto;
 }
 
 .file-input-label {

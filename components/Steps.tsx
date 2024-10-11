@@ -2,7 +2,7 @@ import React from "react";
 
 const Steps: React.FC = () => {
   return (
-    <div className="p-6 bg-[#161819] rounded-[10px] max-w-md mx-auto text-white font-sans border border-[0.5px] border-solid border-[#2D2F31]">
+    <div className="p-6 bg-[#161819] h-full rounded-[10px] max-w-md mx-auto text-white font-sans border border-[0.5px] border-solid border-[#2D2F31]">
       <h2 className="text-center mb-6 text-lg font-medium  border-b border-gray-700 pb-3">How this works?</h2>
       <ul className="list-none relative space-y-6">
         <li className="relative pl-10">
