@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import PostalMime from "postal-mime";
-
+'use client'
 import Steps from "../../components/Steps";
 import NavBar from "../../components/NavBar";
 import '/app/globals.css'
+import Envelope from "@/components/Envelope";
 
 const About = () => {
 
@@ -12,10 +11,11 @@ const About = () => {
 
   return (
     <div className="p-4 grid grid-cols-6 gap-3">
-        <div className="bg-noise relative h-full w-full col-span-6 md:col-span-4 flex flex-col justify-between h-full rounded-[10px] border-solid border-[0.5px] border-[#3B3B3B]">
+        <div className="bg-noise px-[10px] relative h-full w-full col-span-6 md:col-span-4 flex flex-col justify-between h-full rounded-[10px] border-solid border-[0.5px] border-[#3B3B3B]">
             <div className="gradient-noise opacity-100 z-100 absolute inset-0 bg-gradient-to-r from-black via-[#24313D] to-black opacity-90 rounded-[10px]"></div>
+            <NavBar  activeSection='change' mode='home'/>
             <div className="h-[400px]">
-                Envelope
+                <Envelope/>
             </div>
             <div className="text-center mx-auto text-white z-10 mb-[40px]">
                 <div className="my-6">

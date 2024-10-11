@@ -38,7 +38,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Notes for dev
 - used https://github.com/zkemail/email-mask-ui code for base
-- things i added
+
+things i added
+ 
 - npm i postal-mime
 - npm i crypto-browserify
 - npm install @next/font
+- npm install framer-motion

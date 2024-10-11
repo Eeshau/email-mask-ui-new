@@ -308,6 +308,7 @@ useEffect(() => {
     <div style={styles.container}>
 
     <NavBar
+        mode='prove'
         onCompareChanges={handleCompareChanges}
         onResetChanges={handleResetChanges}
         onChangeEmail={handleChangeEmail}

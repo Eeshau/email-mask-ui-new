@@ -11,6 +11,7 @@
   "dependencies": {
     "@next/font": "^14.2.13",
     "crypto-browserify": "^3.12.0",
+    "framer-motion": "^11.11.8",
     "next": "14.2.13",
     "postal-mime": "^2.3.2",
     "react": "^18",
