@@ -10,6 +10,8 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-space-grotesk)', 'sans-serif'],
+        fustat: ['"Fustat"', 'sans-serif'], // Manually added Fustat
+        newsreader: ['var(--font-newsreader)', 'serif'],
       },
       colors: {
         background: "var(--background)",

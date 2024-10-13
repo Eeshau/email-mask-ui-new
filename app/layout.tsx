@@ -1,17 +1,23 @@
-import { Space_Grotesk } from '@next/font/google';
+import { Newsreader } from '@next/font/google';
 import './globals.css';
 
-// Load Space Grotesk with font optimization
-const spaceGrotesk = Space_Grotesk({
+// Load the Newsreader font
+const newsreader = Newsreader({
   subsets: ['latin'],
-  weight: ['400', '500', '700'], // Add required font weights
-  variable: '--font-space-grotesk',
+  variable: '--font-newsreader',
+  display: 'swap',
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={spaceGrotesk.variable}>
+    <html lang="en" className={newsreader.variable}>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&family=Newsreader&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="font-fustat">
         {children}
       </body>
     </html>

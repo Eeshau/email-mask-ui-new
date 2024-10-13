@@ -16,7 +16,7 @@ const About = () => {
             </div>
             <div className="text-center mx-auto text-white z-10 mb-[40px]">
                 <div className="my-6">
-                    <h1 className="text-2xl my-2">Prove any contents for any email, sent or received</h1>
+                    <h1 className="text-2xl my-2 font-newsreader">Prove any contents for any email, sent or received</h1>
                     <p className="max-w-[500px] text-[#A8A8A8]">Prove only what content you want from an email. Hide what you don’t want known, also prove who sent the email</p>
                 </div>
                 <div className="text-center flex flex-col mx-auto w-full justify-center items-center">
