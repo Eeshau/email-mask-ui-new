@@ -10,12 +10,12 @@ export default function Envelope() {
         <img 
           src="/triangleEnvelope.png" 
           alt="Triangle Envelope" 
-          className="absolute z-0 top-[-50px] left-0 w-full h-auto"
+          className="absolute z-0 top-[-65px] left-0 w-full h-auto"
           draggable='false'
         />
 
         {/* Card */}
-        <div className="relative z-10 p-8 text-white text-[10px] bg-[#161819] border-solid border-[0.5px] border-[#3B3B3B] rounded-lg shadow-lg">
+        <div className="relative z-10 p-8 text-white text-[10px] bg-[#161819] border-solid border-[0.5px] border-[#3B3B3B] rounded-lg shadow-lg mx-[20px]">
           <div>
             <div className='flex flex-row justify-between'>
                 <div>
