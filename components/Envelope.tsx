@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Envelope() {
   return (
-    <div className="flex justify-center items-center h-full">
+    <div className="flex justify-center items-center h-full mt-[40px]">
       {/* Envelope Wrapper */}
       <div className="relative w-[400px] h-[280px] rounded-lg">
 
