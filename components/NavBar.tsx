@@ -79,6 +79,17 @@ const NavBar: React.FC<NavBarProps> = ({
 
           {/* Right Side - Desktop */}
           <div className="hidden lg:flex items-center space-x-0 bg-[#161819] px-4 py-1 rounded-[8px] shadow-lg border border-[#3B3B3B]">
+          <button
+              onClick={onChangeEmail}
+              className={`px-4 py-2 ${
+                activeSection === "change"
+                  ? "text-white font-semibold"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              Change Email
+            </button>
+            <div className="border-l border-gray-600 h-6 mx-2"></div>
             <button
               onClick={onCompareChanges}
               className={`px-4 py-2 rounded-l-md ${
@@ -99,17 +110,6 @@ const NavBar: React.FC<NavBarProps> = ({
               }`}
             >
               Reset changes
-            </button>
-            <div className="border-l border-gray-600 h-6 mx-2"></div>
-            <button
-              onClick={onChangeEmail}
-              className={`px-4 py-2 ${
-                activeSection === "change"
-                  ? "text-white font-semibold"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              Change Email
             </button>
             <div className="border-l border-gray-600 h-6 mx-2"></div>
             <button
@@ -168,6 +168,19 @@ const NavBar: React.FC<NavBarProps> = ({
               <div className="absolute right-0 mt-2 w-48 bg-[#161819] rounded-[8px] shadow-lg border border-[#3B3B3B] z-10">
                 <button
                   onClick={() => {
+                    onChangeEmail();
+                    setIsDropdownOpen(false);
+                  }}
+                  className={`block w-full text-left px-4 py-2 ${
+                    activeSection === "change"
+                      ? "text-white font-semibold"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  Change Email
+                </button>
+                <button
+                  onClick={() => {
                     onCompareChanges();
                     setIsDropdownOpen(false);
                   }}
@@ -191,19 +204,6 @@ const NavBar: React.FC<NavBarProps> = ({
                   }`}
                 >
                   Reset changes
-                </button>
-                <button
-                  onClick={() => {
-                    onChangeEmail();
-                    setIsDropdownOpen(false);
-                  }}
-                  className={`block w-full text-left px-4 py-2 ${
-                    activeSection === "change"
-                      ? "text-white font-semibold"
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Change Email
                 </button>
                 <button
                   onClick={() => {
