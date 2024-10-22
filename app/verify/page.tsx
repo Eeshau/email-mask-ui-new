@@ -99,11 +99,6 @@ export default function Verify() {
         // Similarly for headers
         reconstructedContent.headers = reconstructedHeaders.join('');
 
-        // For hidden body parts, perhaps we can note that
-        if (revealed.body.length === 0) {
-            hidden.body.push("Entire body content is hidden.");
-        }
-
         // Extract email signature (domain and selector) from proofData
         const emailSignature: EmailSignature = {
             domain: proofData.dkimSignature?.domain ?? "",  // Fallback to empty string if domain not found
@@ -137,63 +132,63 @@ export default function Verify() {
         }
     };
 
-        return (
-            <div className="p-[20px]">
-              <NavBar activeSection='change' mode='verify'/>
-              <div style={{ display: "flex", flexDirection: "column", margin: "1rem", minWidth: "70vw", gap: "1rem", alignItems: "center" }} className="font-sans">
-                <h1 className="text-4xl text-white">Verify Email</h1>
-                <label className="text-white text-md sm:text-lg text-left">
-                  Paste proof here
-                </label>
-          
-                <textarea
-                  value={proof}
-                  onChange={(e) => setProof(e.target.value)}
-                  rows={5}
-                  placeholder="Paste your proof here"
-                  className="textarea-floating px-[20px] py-[10px] mt-[10px] text-[10px] sm:text-[14px]"
-                />
-                <button className="buttonLight w-full" onClick={analyzeProof}>Verify</button>
-              </div>
-          
-              {/* VERIFIED EMAIL PARTS */}
-              {verified ? 
-              <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] rounded-[12px] p-6 text-white">
-                <h3 className="">Verified email parts</h3>
-                <div className="my-3">
-                  <h3>Proof: <span className={` ${verified ? 'text-[#5EC269]' : 'text-[#FF5F62]'}`}>{verified ? "Verified" : "Invalid"}</span></h3>
-                  <h3>Signed by &quot;{emailSignature.domain}&quot; with selector &quot;{emailSignature.selector}&quot;</h3>
-                </div>
-          
-                <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] my-3"/>
-          
-                {/* Metadata with reconstructed headers */}
-                <h3 className="text-lg font-bold">Metadata</h3>
-                <div className="p-2 text-white">
-                  <p style={{ wordBreak: 'break-word', fontFamily: 'monospace' }}>{reconstructedContent.headers}</p>
-                </div>
-          
-                <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] my-3"/>
-          
-                {/* Message with reconstructed body */}
-                <h3 className="text-lg font-bold">Message</h3>
-                <div className=" p-2 text-white">
-                  <p style={{ wordBreak: 'break-word', fontFamily: 'monospace' }}>{reconstructedContent.body}</p>
-                </div>
-              </div>
-              : <></>}
-          
-              {/* HOW VERIFYING AN EMAIL WORKS STEPS */}
-              <div className="my-20">
-                <h1 className="text-2xl text-white">How it works</h1>
-                <ol className="text-white list-decimal list-inside">
-                  <li>Paste the proof in the input above and click &quot;Verify&quot;.</li>
-                  <li>The proof is verified in browser.</li>
-                  <li>Verified email domain and revealed email parts will be shown after verification.</li>
-                  <li>If the proof is invalid, you will see an error message.</li>
-                </ol>
-              </div>
+    return (
+        <div className="p-[20px]">
+          <NavBar activeSection='change' mode='verify'/>
+          <div style={{ display: "flex", flexDirection: "column", margin: "1rem", minWidth: "70vw", gap: "1rem", alignItems: "center" }} className="font-sans">
+            <h1 className="text-4xl text-white">Verify Email</h1>
+            <label className="text-white text-md sm:text-lg text-left">
+              Paste proof here
+            </label>
+      
+            <textarea
+              value={proof}
+              onChange={(e) => setProof(e.target.value)}
+              rows={5}
+              placeholder="Paste your proof here"
+              className="textarea-floating px-[20px] py-[10px] mt-[10px] text-[10px] sm:text-[14px]"
+            />
+            <button className="buttonLight w-full" onClick={analyzeProof}>Verify</button>
+          </div>
+      
+          {/* VERIFIED EMAIL PARTS */}
+          {verified ? 
+          <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] rounded-[12px] p-6 text-white">
+            <h3 className="">Verified email parts</h3>
+            <div className="my-3">
+              <h3>Proof: <span className={` ${verified ? 'text-[#5EC269]' : 'text-[#FF5F62]'}`}>{verified ? "Verified" : "Invalid"}</span></h3>
+              <h3>Signed by &quot;{emailSignature.domain}&quot; with selector &quot;{emailSignature.selector}&quot;</h3>
             </div>
-          );
-          
+      
+            <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] my-3"/>
+      
+            {/* Metadata with reconstructed headers */}
+            <h3 className="text-lg font-bold">Metadata</h3>
+            <div className="p-2 text-white">
+              <p style={{ wordBreak: 'break-word', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>{reconstructedContent.headers}</p>
+            </div>
+      
+            <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] my-3"/>
+      
+            {/* Message with reconstructed body */}
+            <h3 className="text-lg font-bold">Message</h3>
+            <div className=" p-2 text-white">
+              <p style={{ wordBreak: 'break-word', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>{reconstructedContent.body}</p>
+            </div>
+          </div>
+          : <></>}
+      
+          {/* HOW VERIFYING AN EMAIL WORKS STEPS */}
+          <div className="my-20">
+            <h1 className="text-2xl text-white">How it works</h1>
+            <ol className="text-white list-decimal list-inside">
+              <li>Paste the proof in the input above and click &quot;Verify&quot;.</li>
+              <li>The proof is verified in browser.</li>
+              <li>Verified email domain and revealed email parts will be shown after verification.</li>
+              <li>If the proof is invalid, you will see an error message.</li>
+            </ol>
+          </div>
+        </div>
+      );
 }
+
