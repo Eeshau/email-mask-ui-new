@@ -70,8 +70,12 @@ const EmailRenderer = () => {
     setActiveSection("steps");
     console.log("View Steps Selected");
   };
+  
 
-  // Update highlightedTextMeta when hide toggles change
+
+
+
+  // Update highlightedTextMeta when "hide from, to, subject, body, etc" checkbox toggles change
   useEffect(() => {
     const updatedMetaHighlights = new Set([...highlightedTextMeta]);
   
@@ -101,8 +105,8 @@ const EmailRenderer = () => {
   
 
 
-  // Handle selection for meta and body text separately, checks wether the user is hihglighting the body or the meta (to,from, subject of the email)
-  // need to check this seperatly because one should be text(the meta) and the other might be html content(the body)
+  // Handle selection for meta and body text separately, checks wether the user is highlighting the body or the meta (to,from, subject of the email)
+  // need to check this seperatly when creating the proof because one should be text(the meta) and the other might be html content(the body)
   useEffect(() => {
     const handleSelection = () => {
       const selection = window.getSelection();
@@ -244,23 +248,29 @@ const EmailRenderer = () => {
     }
   };
 
+
+  //SKIPPED OVER THE LOGIC TO GET A HASH, AND JUST SHOWED THE FULL RAW EML, UNCOMMENT FOR HASHED META AND ONLY BODY VERSION  
   const calculateBhContent = (emlContent, bh) => {
-    const bodyContent = extractBodyContent(emlContent);
-    if (bodyContent) {
-      const normalizedContent = normalizeBodyContent(bodyContent);
-      const hash = crypto
-        .createHash("sha256")
-        .update(normalizedContent)
-        .digest("base64");
-      setBhContent(hash === bh ? normalizedContent : `Hash value: ${hash}`);
-    } else {
-      setBhContent("Body content not found");
-    }
+    // const bodyContent = extractBodyContent(emlContent);
+    console.log('EML CONTENT: ',emlContent)
+    // if (bodyContent) {
+    //   const normalizedContent = normalizeBodyContent(bodyContent);
+    //   const hash = crypto
+    //     .createHash("sha256")
+    //     .update(normalizedContent)
+    //     .digest("base64");
+    //   setBhContent(hash === bh ? normalizedContent : `Hash value: ${hash}`);
+      setBhContent( emlContent);
+
+    // } else {
+    //   setBhContent("Body content not found");
+    // }
   };
 
   const extractBodyContent = (emlContent) => {
     const bodyRegex = /\r?\n\r?\n([\s\S]*)/;
     const match = emlContent.match(bodyRegex);
+
     return match ? match[1] : null;
   };
 
@@ -268,6 +278,7 @@ const EmailRenderer = () => {
     const trimmedContent = bodyContent.replace(/\s+$/, "");
     const crlfContent = trimmedContent.replace(/\r?\n/g, "\r\n");
     const normalizedContent = crlfContent.replace(/(\r\n)*$/, "\r\n");
+    console.log('NORMALIZED CONTENT: ',normalizedContent)
     return normalizedContent;
   };
 
@@ -599,7 +610,7 @@ const EmailRenderer = () => {
             <div style={styles.rawContent} className="text-white">
               <h2>Content used for bh</h2>
 
-              <pre>{getHighlightedContent(bhContent, highlightedTextBody)}</pre>
+              <pre>{getHighlightedContent(bhContent, highlightedTextBody.concat(highlightedTextMeta))}</pre>
             </div>
           ) : (
             <div
