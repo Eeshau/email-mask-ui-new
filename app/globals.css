@@ -70,6 +70,8 @@ body {
   color: grey
 }
 
+
+
 .field-container {
   position: relative;
   margin-bottom: 20px;
@@ -107,6 +109,22 @@ body {
   color: #CCE0EA;
 }
 
+
+.buttonLight {
+  width: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 20px;
+  font-weight: 500;
+  color: #161819;
+  background-color: #CCE0EA;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
 
 .button {
   width: fit-content;

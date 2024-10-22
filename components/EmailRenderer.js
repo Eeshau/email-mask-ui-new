@@ -338,7 +338,7 @@ const EmailRenderer = () => {
 
 
   return (
-    <div style={styles.container}>
+    <div className="p-[20px]">
 
     <NavBar
         mode='prove'
