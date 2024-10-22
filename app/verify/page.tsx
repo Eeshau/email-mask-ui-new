@@ -8,30 +8,58 @@ export default function Verify() {
     const [verified, setVerified] = useState(false);
     const [revealedParts, setRevealedParts] = useState({ headers: [], body: [] });
     const [hiddenParts, setHiddenParts] = useState({ headers: [], body: [] });
+    const [reconstructedContent, setReconstructedContent] = useState({ headers: '', body: '' });
 
     // Function to analyze the proof
     const analyzeProofContent = (proof) => {
-        // Simulating proof data structure (replace this with actual proof parsing logic)
         const proofData = JSON.parse(proof); // Assume proof is valid JSON
 
         const revealed = { headers: [], body: [] };
         const hidden = { headers: [], body: [] };
 
+        const reconstructedContent = { headers: '', body: '' };
+
+        // Get headersLen and bodyLen
+        const headersLen = proofData.headersLen || 0;
+        const bodyLen = proofData.bodyLen || 0;
+
+        // Initialize reconstructedBody and reconstructedHeaders with '█'
+        const reconstructedBody = Array(bodyLen).fill('█');
+        const reconstructedHeaders = Array(headersLen).fill('█');
+
         // Analyze revealed headers and body parts
         const headersReveals = proofData.headersReveals || [];
         const bodyReveals = proofData.bodyReveals || [];
-        
-        // Add revealed headers (assume each headerReveal has a 'part' property)
-        for (let header of headersReveals) {
-            revealed.headers.push(header.part);  // Extract 'part' property from each header object
-        }
 
-        // Add revealed body parts (assuming each bodyReveal is an object with a 'part' property)
+        // Process body reveals
         for (let body of bodyReveals) {
-            revealed.body.push(body.part);  // Extract 'part' property from each body object
+            const fromIndex = body.fromIndex;
+            const part = body.part;
+            revealed.body.push(part);  // Extract 'part' property from each body object
+
+            // Insert the revealed part into reconstructedBody
+            for (let i = 0; i < part.length; i++) {
+                if (fromIndex + i < bodyLen) {
+                    reconstructedBody[fromIndex + i] = part.charAt(i);
+                }
+            }
         }
 
-        // Common headers we expect (can extend based on email structure)
+        // Process headers reveals
+        for (let header of headersReveals) {
+            const fromIndex = header.fromIndex;
+            const part = header.part;
+            revealed.headers.push(part);  // Extract 'part' property from each header object
+
+            // Insert the revealed part into reconstructedHeaders
+            for (let i = 0; i < part.length; i++) {
+                if (fromIndex + i < headersLen) {
+                    reconstructedHeaders[fromIndex + i] = part.charAt(i);
+                }
+            }
+        }
+
+        // For hidden headers, if no headers are revealed, perhaps we can note that
         const possibleHeaders = ["from", "to", "subject", "date", "reply-to", "message-id", "cc", "bcc"];
         const revealedHeadersSet = new Set(revealed.headers.map(h => h.split(":")[0]));
 
@@ -42,12 +70,18 @@ export default function Verify() {
             }
         }
 
-        // If no body parts revealed, assume entire body is hidden
+        // Now, reconstructedBody is an array, we can join it into a string
+        reconstructedContent.body = reconstructedBody.join('');
+
+        // Similarly for headers
+        reconstructedContent.headers = reconstructedHeaders.join('');
+
+        // For hidden body parts, perhaps we can note that
         if (revealed.body.length === 0) {
             hidden.body.push("Entire body content is hidden.");
         }
 
-        return { revealed, hidden };
+        return { revealed, hidden, reconstructedContent };
     };
 
     const analyzeProof = () => {
@@ -57,6 +91,7 @@ export default function Verify() {
                 const analysisResult = analyzeProofContent(proof);
                 setRevealedParts(analysisResult.revealed);
                 setHiddenParts(analysisResult.hidden);
+                setReconstructedContent(analysisResult.reconstructedContent);
 
                 // Simulate proof verification (replace with actual verification logic)
                 setVerified(true);  // Assume proof is valid
@@ -64,6 +99,7 @@ export default function Verify() {
                 setVerified(false);
                 setRevealedParts({ headers: [], body: [] });
                 setHiddenParts({ headers: [], body: [] });
+                setReconstructedContent({ headers: '', body: '' });
             }
         } catch (error) {
             // Handle parsing errors or invalid proof format
@@ -71,6 +107,7 @@ export default function Verify() {
             setVerified(false);
             setRevealedParts({ headers: [], body: [] });
             setHiddenParts({ headers: [], body: [] });
+            setReconstructedContent({ headers: '', body: '' });
         }
     };
 
@@ -94,6 +131,7 @@ export default function Verify() {
             </div>
 
             {/* VERIFIED EMAIL PARTS */}
+            {verified ? 
             <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] rounded-[12px] p-6 text-white">
                 <h3 className="">Verified email parts</h3>
                 <div className="my-3">
@@ -103,52 +141,21 @@ export default function Verify() {
 
                 <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] my-3"/>
 
-                {/* Metadata with revealed/hidden elements */}
+                {/* Metadata with reconstructed headers */}
                 <h3 className="text-lg font-bold">Metadata</h3>
                 <div className="bg-white p-2 text-black">
-                    <h4>Revealed Headers:</h4>
-                    {revealedParts.headers.length > 0 ? (
-                        <ul>
-                            {revealedParts.headers.map((header, index) => (
-                                <li key={index}>{header}</li>
-                            ))}
-                        </ul>
-                    ) : <p>No revealed headers.</p>}
-
-                    <h4>Hidden Headers:</h4>
-                    {hiddenParts.headers.length > 0 ? (
-                        <ul>
-                            {hiddenParts.headers.map((header, index) => (
-                                <li key={index}>{header}</li>
-                            ))}
-                        </ul>
-                    ) : <p>No hidden headers.</p>}
+                    <p style={{ wordBreak: 'break-word', fontFamily: 'monospace' }}>{reconstructedContent.headers}</p>
                 </div>
 
                 <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] my-3"/>
 
-                {/* Message with revealed/hidden elements */}
+                {/* Message with reconstructed body */}
                 <h3 className="text-lg font-bold">Message</h3>
                 <div className="bg-white p-2 text-black">
-                    <h4>Revealed Body:</h4>
-                    {revealedParts.body.length > 0 ? (
-                        <ul>
-                            {revealedParts.body.map((part, index) => (
-                                <li key={index}>{part}</li>
-                            ))}
-                        </ul>
-                    ) : <p>No revealed body content.</p>}
-
-                    <h4>Hidden Body:</h4>
-                    {hiddenParts.body.length > 0 ? (
-                        <ul>
-                            {hiddenParts.body.map((part, index) => (
-                                <li key={index}>{part}</li>
-                            ))}
-                        </ul>
-                    ) : <p>No hidden body content.</p>}
+                    <p style={{ wordBreak: 'break-word', fontFamily: 'monospace' }}>{reconstructedContent.body}</p>
                 </div>
             </div>
+            : <></>}
 
             {/* HOW VERIFYING AN EMAIL WORKS STEPS */}
             <div className="my-20">
