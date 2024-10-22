@@ -153,7 +153,7 @@ export default function Verify() {
 
                 {/* Metadata with reconstructed headers */}
                 <h3 className="text-lg font-bold">Metadata</h3>
-                <div className="bg-white p-2 text-black">
+                <div className="p-2 text-white">
                     <p style={{ wordBreak: 'break-word', fontFamily: 'monospace' }}>{reconstructedContent.headers}</p>
                 </div>
 
@@ -161,7 +161,7 @@ export default function Verify() {
 
                 {/* Message with reconstructed body */}
                 <h3 className="text-lg font-bold">Message</h3>
-                <div className="bg-white p-2 text-black">
+                <div className=" p-2 text-white">
                     <p style={{ wordBreak: 'break-word', fontFamily: 'monospace' }}>{reconstructedContent.body}</p>
                 </div>
             </div>
