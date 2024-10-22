@@ -103,37 +103,57 @@ const EmailRenderer = () => {
 
   // Handle selection for meta and body text separately, checks wether the user is hihglighting the body or the meta (to,from, subject of the email)
   // need to check this seperatly because one should be text(the meta) and the other might be html content(the body)
-useEffect(() => {
-  const handleSelection = () => {
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0 && selection.toString().trim().length > 0) {
-      const selectedText = selection.toString().trim();
-
-      // Check if selection is from the email body or meta fields
-      const selectedElement = selection.anchorNode?.parentElement;
-
-      if (selectedElement?.closest('.email-body-container')) {
-        // Add to body highlights if selection is from the email body
-        setHighlightedTextBody((prev) => [...prev, selectedText]);
-        console.log("Highlighted in Body: ", selectedText); // Debugging
-      } else {
-        // Otherwise, add to meta highlights
-        setHighlightedTextMeta((prev) => [...prev, selectedText]);
-        console.log("Highlighted in Meta: ", selectedText); // Debugging
+  useEffect(() => {
+    const handleSelection = () => {
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0 && selection.toString().trim().length > 0) {
+        const selectedText = selection.toString().trim();
+  
+        // Check if selection is from the email body or meta fields
+        const selectedElement = selection.anchorNode?.parentElement;
+  
+        if (selectedElement?.closest('.email-body-container')) {
+          // Toggle body highlights
+          setHighlightedTextBody((prev) => {
+            if (prev.includes(selectedText)) {
+              // Remove selectedText from highlightedTextBody
+              return prev.filter((text) => text !== selectedText);
+            } else {
+              // Add selectedText to highlightedTextBody
+              return [...prev, selectedText];
+            }
+          });
+          console.log("Selected in Body: ", selectedText);
+        } else {
+          // Toggle meta highlights
+          setHighlightedTextMeta((prev) => {
+            if (prev.includes(selectedText)) {
+              // Remove selectedText from highlightedTextMeta
+              return prev.filter((text) => text !== selectedText);
+            } else {
+              // Add selectedText to highlightedTextMeta
+              return [...prev, selectedText];
+            }
+          });
+          console.log("Selected in Meta: ", selectedText);
+        }
       }
+    };
+  
+    if (highlightEnabled) {
+      document.addEventListener("mouseup", handleSelection);
+    } else {
+      document.removeEventListener("mouseup", handleSelection);
     }
-  };
+  
+    return () => {
+      document.removeEventListener("mouseup", handleSelection);
+    };
+  }, [highlightEnabled]);
+  
 
-  if (highlightEnabled) {
-    document.addEventListener("mouseup", handleSelection);
-  } else {
-    document.removeEventListener("mouseup", handleSelection);
-  }
 
-  return () => {
-    document.removeEventListener("mouseup", handleSelection);
-  };
-}, [highlightEnabled]);
+
 
 
   const handleFileUpload = async (e) => {
