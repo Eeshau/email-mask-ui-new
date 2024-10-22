@@ -9,6 +9,7 @@ export default function Verify() {
     const [revealedParts, setRevealedParts] = useState({ headers: [], body: [] });
     const [hiddenParts, setHiddenParts] = useState({ headers: [], body: [] });
     const [reconstructedContent, setReconstructedContent] = useState({ headers: '', body: '' });
+    const [emailSignature, setEmailSignature] = useState({ domain: "", selector: "" });
 
     // Function to analyze the proof
     const analyzeProofContent = (proof) => {
@@ -81,7 +82,13 @@ export default function Verify() {
             hidden.body.push("Entire body content is hidden.");
         }
 
-        return { revealed, hidden, reconstructedContent };
+        // Extract email signature (domain and selector) from proofData
+        const emailSignature = {
+            domain: proofData.dkimSignature.domain || "",  // Fallback to empty string if domain not found
+            selector: proofData.dkimSignature.selector || "" // Fallback to empty string if selector not found
+        };
+
+        return { revealed, hidden, reconstructedContent, emailSignature };
     };
 
     const analyzeProof = () => {
@@ -92,6 +99,7 @@ export default function Verify() {
                 setRevealedParts(analysisResult.revealed);
                 setHiddenParts(analysisResult.hidden);
                 setReconstructedContent(analysisResult.reconstructedContent);
+                setEmailSignature(analysisResult.emailSignature);
 
                 // Simulate proof verification (replace with actual verification logic)
                 setVerified(true);  // Assume proof is valid
@@ -100,6 +108,7 @@ export default function Verify() {
                 setRevealedParts({ headers: [], body: [] });
                 setHiddenParts({ headers: [], body: [] });
                 setReconstructedContent({ headers: '', body: '' });
+                setEmailSignature({ domain: "", selector: "" });
             }
         } catch (error) {
             // Handle parsing errors or invalid proof format
@@ -108,6 +117,7 @@ export default function Verify() {
             setRevealedParts({ headers: [], body: [] });
             setHiddenParts({ headers: [], body: [] });
             setReconstructedContent({ headers: '', body: '' });
+            setEmailSignature({ domain: "", selector: "" });
         }
     };
 
@@ -136,7 +146,7 @@ export default function Verify() {
                 <h3 className="">Verified email parts</h3>
                 <div className="my-3">
                     <h3>Proof: <span className={` ${verified ? 'text-[#5EC269]' : 'text-[#FF5F62]'}`}>{verified ? "Verified" : "Invalid"}</span></h3>
-                    <h3>Signed by "@icloud.com" with selector "1a1hai"</h3>
+                    <h3>Signed by "{emailSignature.domain}" with selector "{emailSignature.selector}"</h3>
                 </div>
 
                 <div className="border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] my-3"/>
