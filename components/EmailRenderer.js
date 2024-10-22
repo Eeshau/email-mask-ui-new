@@ -415,13 +415,16 @@ const EmailRenderer = () => {
             {activeSection == "compare" ? <h1 className="text-xl text-center">Masked Email</h1> : null}
 
             <div className="flex justify-between items-center border-b border-gray-700 py-2">
-              <div className="flex">
-                <label className="w-[60px] sm:w-[80px]">From:</label>
-                <div style={styles.input}>
+              <div className="flex flex-1 overflow-hidden">
+                <label className="w-[60px] sm:w-[80px] flex-shrink-0">From:</label>
+                <div
+                  style={styles.input}
+                  className="overflow-x-auto whitespace-nowrap"
+                >
                   {getHighlightedContent(fromEmail, highlightedTextMeta)}
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-shrink-0">
                 <input
                   type="checkbox"
                   checked={hideFrom}
@@ -431,10 +434,11 @@ const EmailRenderer = () => {
               </div>
             </div>
 
+
             <div className="flex justify-between items-center border-b border-gray-700 py-2">
-              <div className="flex">
-                <label className="w-[60px] sm:w-[80px]">To:</label>    
-                <div style={styles.input}>
+              <div className="flex flex-1 overflow-hidden">
+                <label className="w-[60px] sm:w-[80px] flex-shrink-0">To:</label>    
+                <div style={styles.input} className="overflow-x-auto whitespace-nowrap">
                   {getHighlightedContent(toEmail, highlightedTextMeta)}
                 </div>
               </div>
@@ -449,9 +453,9 @@ const EmailRenderer = () => {
             </div>
 
             <div className="flex justify-between items-center border-b border-gray-700 py-2">
-              <div className="flex">
-                <label className="w-[60px] sm:w-[80px]">Subject:</label>
-                <div style={styles.input}>
+              <div className="flex flex-1 overflow-hidden">
+                <label className="w-[60px] sm:w-[80px] flex-shrink-0">Subject:</label>
+                <div style={styles.input} className="overflow-x-auto whitespace-nowrap">
                   {getHighlightedContent(subject, highlightedTextMeta)}
                 </div>
               </div>
