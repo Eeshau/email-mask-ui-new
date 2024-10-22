@@ -239,7 +239,7 @@ const EmailRenderer = () => {
     const bhRegex = /bh=([^;]+)/;
     const match = emlContent.match(bhRegex);
     if (match) {
-      // const bh = match[1];
+      const bh = match[1];
       setBhValue(bh);
       calculateBhContent(emlContent, bh);
       console.log(bhValue)
@@ -250,7 +250,7 @@ const EmailRenderer = () => {
 
 
   //SKIPPED OVER THE LOGIC TO GET A HASH, AND JUST SHOWED THE FULL RAW EML, UNCOMMENT FOR HASHED META AND ONLY BODY VERSION  
-  const calculateBhContent = (emlContent, bh) => {
+  const calculateBhContent = (emlContent) => {
     // const bodyContent = extractBodyContent(emlContent);
     console.log('EML CONTENT: ',emlContent)
     // if (bodyContent) {
