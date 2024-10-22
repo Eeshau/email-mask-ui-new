@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import PostalMime from "postal-mime";
-import crypto from "crypto-browserify";
+// import crypto from "crypto-browserify";
 import { styles } from "./styles";
 
 import Steps from "./Steps";
@@ -239,7 +239,7 @@ const EmailRenderer = () => {
     const bhRegex = /bh=([^;]+)/;
     const match = emlContent.match(bhRegex);
     if (match) {
-      const bh = match[1];
+      // const bh = match[1];
       setBhValue(bh);
       calculateBhContent(emlContent, bh);
       console.log(bhValue)
@@ -267,20 +267,20 @@ const EmailRenderer = () => {
     // }
   };
 
-  const extractBodyContent = (emlContent) => {
-    const bodyRegex = /\r?\n\r?\n([\s\S]*)/;
-    const match = emlContent.match(bodyRegex);
+  // const extractBodyContent = (emlContent) => {
+  //   const bodyRegex = /\r?\n\r?\n([\s\S]*)/;
+  //   const match = emlContent.match(bodyRegex);
 
-    return match ? match[1] : null;
-  };
+  //   return match ? match[1] : null;
+  // };
 
-  const normalizeBodyContent = (bodyContent) => {
-    const trimmedContent = bodyContent.replace(/\s+$/, "");
-    const crlfContent = trimmedContent.replace(/\r?\n/g, "\r\n");
-    const normalizedContent = crlfContent.replace(/(\r\n)*$/, "\r\n");
-    console.log('NORMALIZED CONTENT: ',normalizedContent)
-    return normalizedContent;
-  };
+  // const normalizeBodyContent = (bodyContent) => {
+  //   const trimmedContent = bodyContent.replace(/\s+$/, "");
+  //   const crlfContent = trimmedContent.replace(/\r?\n/g, "\r\n");
+  //   const normalizedContent = crlfContent.replace(/(\r\n)*$/, "\r\n");
+  //   console.log('NORMALIZED CONTENT: ',normalizedContent)
+  //   return normalizedContent;
+  // };
 
   // Filter and sanitize highlightedText to avoid empty or invalid strings
   const getValidHighlightedText = (highlightArray) => {
