@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 import '/app/globals.css'
 import Envelope from "@/components/Envelope";
 
-import { useContext } from 'react';
+import { useContext, ChangeEvent } from 'react';
 import { FileContext } from './FileContext'; 
 import { useRouter } from 'next/navigation';
 
@@ -13,18 +13,19 @@ const About = () => {
     const { setFileContent } = useContext(FileContext);
     const router = useRouter();
 
-    const handleFileUpload = (e) => {
+    const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (event) => {
-            const content = event.target?.result;
-            setFileContent(content);
-            router.push('/prove');
+                const content = event.target?.result;
+                setFileContent(content);
+                router.push('/prove');
             };
             reader.readAsText(file);
         }
-        };
+    };
+
 
   return (
     <div className="p-4 grid grid-cols-6 gap-3">
