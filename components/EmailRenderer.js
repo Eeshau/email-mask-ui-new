@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PostalMime from "postal-mime";
 import crypto from "crypto-browserify";
 import { styles } from "./styles";
 
 import Steps from "./Steps";
 import NavBar from "./NavBar";
+
+import { FileContext } from '../app/FileContext';
 
 // Helper function to escape special regex characters in the text
 const escapeRegExp = (string) => {
@@ -14,7 +16,8 @@ const escapeRegExp = (string) => {
 const EmailRenderer = () => {
   // States for actual email content
   const [emailBody, setEmailBody] = useState("");
-  const [fileContent, setFileContent] = useState("");
+  const { fileContent, setFileContent } = useContext(FileContext);
+
   const [fromEmail, setFromEmail] = useState(""); // Store the From email address
   const [toEmail, setToEmail] = useState(""); // Store the To email address
   const [subject, setSubject] = useState(""); // Store the Subject
@@ -158,6 +161,8 @@ useEffect(() => {
     extractBhValue(content);
   };
 
+  
+
   const parseEml = async (emlContent) => {
     const parser = new PostalMime();
     let parsedEmail;
@@ -197,6 +202,14 @@ useEffect(() => {
       setSubject(subjectMatch ? subjectMatch[1] : 'Unknown');
     }
   };
+
+    // Parse the EML content when fileContent changes
+    useEffect(() => {
+      if (fileContent) {
+        parseEml(fileContent);
+        extractBhValue(fileContent);
+      }
+    }, [fileContent]);
 
   const extractBhValue = (emlContent) => {
     const bhRegex = /bh=([^;]+)/;
@@ -431,13 +444,13 @@ useEffect(() => {
       {fileContent ? (
         <div
         style={{
-          position: "fixed",  // Change from 'absolute' to 'fixed' to make the buttons sticky
-          bottom: "20px",     // Keep them 20px from the bottom of the viewport
+          position: "fixed",  
+          bottom: "20px",    
           left: "50%",
           transform: "translateX(-50%)", 
           display: "flex",
           flexDirection: "row",
-          alignItems: "center",  // Align items vertically in the center
+          alignItems: "center",  
           gap: "1rem",
           zIndex: 1000,      
           backgroundColor: "#26272E",
@@ -523,7 +536,7 @@ useEffect(() => {
           onClick={() => setShowEMLPreview(!showEMLPreview)}
           className="button font-sans whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
         >
-          {(showEMLPreview )? "Show Raw EML" : "Show EML Preview"}
+          {(showEMLPreview )? "Show EML Preview" : "Show Raw EML"}
         </button>
 
         {/* Divider */}

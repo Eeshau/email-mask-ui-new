@@ -1,5 +1,6 @@
 import { Newsreader } from '@next/font/google';
 import './globals.css';
+import { FileProvider } from './FileContext';
 
 // Load the Newsreader font
 const newsreader = Newsreader({
@@ -18,7 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="font-fustat">
-        {children}
+        <FileProvider>
+          {children}
+        </FileProvider>
       </body>
     </html>
   );

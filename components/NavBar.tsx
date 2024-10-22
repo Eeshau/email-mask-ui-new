@@ -30,14 +30,14 @@ const NavBar: React.FC<NavBarProps> = ({
       <div className="flex items-center space-x-1 sm:space-x-4 bg-[#161819] px-2 sm:px-4 py-1 rounded-[8px] shadow-lg border border-[#3B3B3B] whitespace-nowrap">
         
         <Link href="/">
-        <div className="text-white font-200">
+        <div className="text-white font-200 px-1 sm:px-0">
           <span className="font-semibold">ZK </span>
           Whistleblower
         </div>
         </Link>
 
         {/* Divider */}
-        <div className="border-l border-gray-600 h-6 mx-1 sm:mx-2"></div>
+        <div className="border-l border-gray-600 h-6 mx-1 sm:mx-"></div>
 
         {/* Conditionally render 'Prove' button */}
         {mode === 'home' && (
@@ -58,7 +58,7 @@ const NavBar: React.FC<NavBarProps> = ({
           </>
         )}
 
-        <Link href="/verify">
+        <Link href="https://sdk.prove.email/" target="_blank">
           <button
             className={`px-2 sm:px-4 py-2 rounded-md ${
               activeSection === 'verify'

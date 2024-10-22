@@ -4,7 +4,27 @@ import NavBar from "../components/NavBar";
 import '/app/globals.css'
 import Envelope from "@/components/Envelope";
 
+import { useContext } from 'react';
+import { FileContext } from './FileContext'; 
+import { useRouter } from 'next/navigation';
+
 const About = () => {
+
+    const { setFileContent } = useContext(FileContext);
+    const router = useRouter();
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+            const content = event.target?.result;
+            setFileContent(content);
+            router.push('/prove');
+            };
+            reader.readAsText(file);
+        }
+        };
 
   return (
     <div className="p-4 grid grid-cols-6 gap-3">
@@ -28,12 +48,13 @@ const About = () => {
                         </svg>
                         </label>
 
+
                         <input
-                        id="file-upload"
-                        className="file-input"
-                        type="file"
-                        accept=".eml"
-                        // onChange={handleFileUpload}
+                            id="file-upload"
+                            className="file-input"
+                            type="file"
+                            accept=".eml"
+                            onChange={handleFileUpload}
                         />
                     </div>
                     <div className="flex items-center justify-center w-full my-6">

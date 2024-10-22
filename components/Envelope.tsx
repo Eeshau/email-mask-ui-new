@@ -15,7 +15,7 @@ export default function Envelope() {
         />
 
         {/* Card */}
-        <div className="relative z-10 p-8 text-white text-[10px] bg-[#161819] border-solid border-[0.5px] border-[#3B3B3B] rounded-lg shadow-lg mx-[20px]">
+        <div className="relative z-10 p-7 text-white text-[8px] sm:text-[10px] bg-[#161819] border-solid border-[0.5px] border-[#3B3B3B] rounded-lg shadow-lg  mx-[10px] sm:mx-[20px]">
           <div>
             <div className='flex flex-row justify-between'>
                 <div>
