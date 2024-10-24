@@ -44,4 +44,4 @@ things i added
 - npm i postal-mime
 - npm i crypto-browserify
 - npm install @next/font
-- npm install framer-motion
+- npm i @zk-email/zk-email-sdk

@@ -168,7 +168,6 @@ const EmailRenderer = () => {
         const content = event.target?.result;
         setFileContent(content);
         await parseEml(content);
-        extractBhValue(content);
       };
       reader.readAsText(file);
     }
@@ -231,56 +230,12 @@ const EmailRenderer = () => {
     useEffect(() => {
       if (fileContent) {
         parseEml(fileContent);
-        extractBhValue(fileContent);
+        setBhContent(fileContent)
       }
     }, [fileContent]);
 
-  const extractBhValue = (emlContent) => {
-    const bhRegex = /bh=([^;]+)/;
-    const match = emlContent.match(bhRegex);
-    if (match) {
-      const bh = match[1];
-      setBhValue(bh);
-      calculateBhContent(emlContent, bh);
-      console.log(bhValue)
-    } else {
-      setBhContent("bh value not found");
-    }
-  };
 
 
-  //SKIPPED OVER THE LOGIC TO GET A HASH, AND JUST SHOWED THE FULL RAW EML, UNCOMMENT FOR HASHED META AND ONLY BODY VERSION  
-  const calculateBhContent = (emlContent) => {
-    // const bodyContent = extractBodyContent(emlContent);
-    console.log('EML CONTENT: ',emlContent)
-    // if (bodyContent) {
-    //   const normalizedContent = normalizeBodyContent(bodyContent);
-    //   const hash = crypto
-    //     .createHash("sha256")
-    //     .update(normalizedContent)
-    //     .digest("base64");
-    //   setBhContent(hash === bh ? normalizedContent : `Hash value: ${hash}`);
-      setBhContent( emlContent);
-
-    // } else {
-    //   setBhContent("Body content not found");
-    // }
-  };
-
-  // const extractBodyContent = (emlContent) => {
-  //   const bodyRegex = /\r?\n\r?\n([\s\S]*)/;
-  //   const match = emlContent.match(bodyRegex);
-
-  //   return match ? match[1] : null;
-  // };
-
-  // const normalizeBodyContent = (bodyContent) => {
-  //   const trimmedContent = bodyContent.replace(/\s+$/, "");
-  //   const crlfContent = trimmedContent.replace(/\r?\n/g, "\r\n");
-  //   const normalizedContent = crlfContent.replace(/(\r\n)*$/, "\r\n");
-  //   console.log('NORMALIZED CONTENT: ',normalizedContent)
-  //   return normalizedContent;
-  // };
 
   // Filter and sanitize highlightedText to avoid empty or invalid strings
   const getValidHighlightedText = (highlightArray) => {
