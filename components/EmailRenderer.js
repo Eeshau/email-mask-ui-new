@@ -13,6 +13,7 @@ const escapeRegExp = (string) => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special regex characters
 };
 
+
 const EmailRenderer = () => {
   // States for actual email content
   const [emailBody, setEmailBody] = useState("");
@@ -22,7 +23,7 @@ const EmailRenderer = () => {
   const [toEmail, setToEmail] = useState(""); // Store the To email address
   const [subject, setSubject] = useState(""); // Store the Subject
   const [bhContent, setBhContent] = useState("");
-  const [bhValue, setBhValue] = useState("");
+  // const [bhValue, setBhValue] = useState("");
 
   // States for content that's been redacted
   const [highlightedTextMeta, setHighlightedTextMeta] = useState([]); // For meta fields
@@ -31,7 +32,8 @@ const EmailRenderer = () => {
   // States for toggle bar
   const [highlightEnabled, setHighlightEnabled] = useState(false);
   const [showEMLPreview, setShowEMLPreview] = useState(false); // Toggle between raw EML and preview
-  const [postProofGeneration, setPostProofGeneration] = useState(false); // determines wether proof is generated and show the user Download Mail or Copy verification link
+  // const [postProofGeneration, setPostProofGeneration] = useState(false); // determines whether proof is generated and show the user Download Mail or Copy verification link
+  const [proofStatus, setProofStatus] = useState('generate proof'); 
 
   // States for hiding "From", "To", and "Subject"
   const [hideFrom, setHideFrom] = useState(false);
@@ -41,7 +43,6 @@ const EmailRenderer = () => {
   // State for copy verification link & Download Mail
   const [linkCopied, setLinkCopied] = useState(false);
   const [downloadedMail, setDownloadedMail] = useState(false);
-
 
   // States for the active section in the top right menu, determines what step to show on screen
   const [activeSection, setActiveSection] = useState("change");
@@ -70,10 +71,6 @@ const EmailRenderer = () => {
     setActiveSection("steps");
     console.log("View Steps Selected");
   };
-  
-
-
-
 
   // Update highlightedTextMeta when "hide from, to, subject, body, etc" checkbox toggles change
   useEffect(() => {
@@ -102,11 +99,8 @@ const EmailRenderer = () => {
   
     setHighlightedTextMeta([...updatedMetaHighlights]);
   }, [hideFrom, hideTo, hideSubject, fromEmail, toEmail, subject]);
-  
 
-
-  // Handle selection for meta and body text separately, checks wether the user is highlighting the body or the meta (to,from, subject of the email)
-  // need to check this seperatly when creating the proof because one should be text(the meta) and the other might be html content(the body)
+  // Handle selection for meta and body text separately
   useEffect(() => {
     const handleSelection = () => {
       const selection = window.getSelection();
@@ -154,11 +148,6 @@ const EmailRenderer = () => {
       document.removeEventListener("mouseup", handleSelection);
     };
   }, [highlightEnabled]);
-  
-
-
-
-
 
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -181,10 +170,14 @@ const EmailRenderer = () => {
     const content = e.target.value;
     setFileContent(content);
     await parseEml(content);
-    extractBhValue(content);
+    // extractBhValue(content); // Uncomment if needed
   };
 
-  
+  // Function to process email body and inject the background color style
+  const processEmailBody = (content) => {
+    const style = '<style>.gmail-actual-text { background-color: #F6F8FA !important; }</style>';
+    return style + content;
+  };
 
   const parseEml = async (emlContent) => {
     const parser = new PostalMime();
@@ -211,7 +204,12 @@ const EmailRenderer = () => {
         setSubject(subject || 'Unknown');
       }
 
-      setEmailBody(parsedEmail.html || parsedEmail.text || "No body content found");
+      // Process the email body to inject the background color style
+      if (parsedEmail.html) {
+        setEmailBody(processEmailBody(parsedEmail.html));
+      } else {
+        setEmailBody(parsedEmail.text || "No body content found");
+      }
 
     } catch (error) {
       console.error("Error parsing EML file with PostalMime:", error);
@@ -223,19 +221,18 @@ const EmailRenderer = () => {
       setFromEmail(fromMatch ? fromMatch[1] : 'Unknown');
       setToEmail(toMatch ? toMatch[1] : 'Unknown');
       setSubject(subjectMatch ? subjectMatch[1] : 'Unknown');
+
+      setEmailBody("No body content found");
     }
   };
 
-    // Parse the EML content when fileContent changes
-    useEffect(() => {
-      if (fileContent) {
-        parseEml(fileContent);
-        setBhContent(fileContent)
-      }
-    }, [fileContent]);
-
-
-
+  // Parse the EML content when fileContent changes
+  useEffect(() => {
+    if (fileContent) {
+      parseEml(fileContent);
+      setBhContent(fileContent)
+    }
+  }, [fileContent]);
 
   // Filter and sanitize highlightedText to avoid empty or invalid strings
   const getValidHighlightedText = (highlightArray) => {
@@ -248,9 +245,12 @@ const EmailRenderer = () => {
     const validHighlightedText = getValidHighlightedText(highlightArray);
     if (validHighlightedText.length === 0) return content;
 
+    // Combine all highlight phrases into one regex
     const escapedText = validHighlightedText.map(escapeRegExp);
     const combinedRegex = new RegExp(`(${escapedText.join('|')})`, 'gi');
+    // console.log('COMBINED REGEX: ', combinedRegex, '/n HIGHLIGHT ARRAY:',highlightArray)
 
+    // Split the content based on the combined regex and wrap matches in highlighted <span> elements
     return content.split(combinedRegex).map((part, index) =>
       combinedRegex.test(part) ? (
         <span className="highlight" key={`highlight-${index}`}>
@@ -265,10 +265,11 @@ const EmailRenderer = () => {
 
 
   const getHighlightedContentHTML = (content) => {
-    
-    if (highlightedTextBody.length === 0) return content;
+    // Inject the style to set the background color if unset, handles case that email has no background color
+    const style = '<style>.gmail-actual-text { background-color: #F6F8FA !important; }</style>';
+    let highlightedContent = style + content;
 
-    let highlightedContent = content;
+    if (highlightedTextBody.length === 0) return highlightedContent;
 
     highlightedTextBody.forEach((text) => {
       // Match the highlighted text only if it's not inside HTML tags
@@ -283,7 +284,19 @@ const EmailRenderer = () => {
   };
 
 
-  // Copy Verifcation Link to clipboard
+  //Generate proof
+  const generateProof = () => {
+    //simulate 3 second proof gen
+    setProofStatus('generating proof')
+    setTimeout(() => {
+      setProofStatus('generated proof')
+      // setPostProofGeneration(true);
+    }, 3000);
+  }
+
+
+
+  // Copy Verification Link to clipboard
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText('replace with verification link to be copied to users clipboard');
@@ -296,11 +309,50 @@ const EmailRenderer = () => {
 
   // Download Mail 
   const handleDownload = () => {
-    //need to add logic for this
+    // Need to add logic for this
     setDownloadedMail(true);
     setTimeout(() => setDownloadedMail(false), 2000);  // Reset after 2 seconds
   };
 
+
+  // function to get single combined regex from highlighted content
+  const getCombinedRegex = (highlightArray) => {
+    const validHighlightedText = getValidHighlightedText(highlightArray);
+    if (validHighlightedText.length === 0) return null;
+
+    // Combine all highlight phrases into one regex
+    const escapedText = validHighlightedText.map(escapeRegExp);
+    const combinedRegex = new RegExp(`(${escapedText.join('|')})`, 'gi');
+    console.log('COMBINED REGEX: ', combinedRegex)
+
+
+    //Fields to Extract for sdk
+    // add field name?
+    // add Data Location
+    // add max length of extracted data 
+    const patternJSON = 
+    [
+      // First Part (true): Captures everything before the matched phrases and makes it public.
+      {
+        "is_public": true,
+        "regex_def": `.*?(?=${combinedRegex})`
+      },
+      // Second Part (false): Matches your specific phrases and makes them private.
+      {
+        "is_public": false,
+        "regex_def": `(${combinedRegex})`
+      },
+      // Third Part (true): Captures everything after the matched phrases and makes it public.
+      {
+        "is_public": true,
+        "regex_def": `(?<=${combinedRegex}).*`
+      }
+    ]
+
+    console.log(patternJSON)
+  }
+
+  getCombinedRegex(highlightedTextBody.concat(highlightedTextMeta))
 
 
   return (
@@ -341,17 +393,18 @@ const EmailRenderer = () => {
             className="textarea-floating px-[20px] py-[10px] mt-[10px] text-[10px] sm:text-[14px]"
           />
 
-          <div class="file-input-container">
+          <div className="file-input-container">
             <label htmlFor="file-upload" className="file-input-label text-[10px] sm:text-[14px]">
               Choose a file
               <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" viewBox="0 0 16 16" fill="none">
                 <path d="M13.3538 5.14625L9.85375 1.64625C9.80728 1.59983 9.75212 1.56303 9.69143 1.53793C9.63073 1.51284 9.56568 1.49995 9.5 1.5H3.5C3.23478 1.5 2.98043 1.60536 2.79289 1.79289C2.60536 1.98043 2.5 2.23478 2.5 2.5V13.5C2.5 13.7652 2.60536 14.0196 2.79289 14.2071C2.98043 14.3946 3.23478 14.5 3.5 14.5H12.5C12.7652 14.5 13.0196 14.3946 13.2071 14.2071C13.3946 14.0196 13.5 13.7652 13.5 13.5V5.5C13.5001 5.43432 13.4872 5.36927 13.4621 5.30858C13.437 5.24788 13.4002 5.19272 13.3538 5.14625ZM10 3.20688L11.7931 5H10V3.20688ZM12.5 13.5H3.5V2.5H9V5.5C9 5.63261 9.05268 5.75979 9.14645 5.85355C9.24021 5.94732 9.36739 6 9.5 6H12.5V13.5ZM9.85375 8.64625C9.90021 8.6927 9.93706 8.74786 9.9622 8.80855C9.98734 8.86925 10.0003 8.9343 10.0003 9C10.0003 9.0657 9.98734 9.13075 9.9622 9.19145C9.93706 9.25214 9.90021 9.3073 9.85375 9.35375C9.8073 9.40021 9.75214 9.43706 9.69145 9.4622C9.63075 9.48734 9.5657 9.50028 9.5 9.50028C9.4343 9.50028 9.36925 9.48734 9.30855 9.4622C9.24786 9.43706 9.1927 9.40021 9.14625 9.35375L8.5 8.70687V11.5C8.5 11.6326 8.44732 11.7598 8.35355 11.8536C8.25979 11.9473 8.13261 12 8 12C7.86739 12 7.74021 11.9473 7.64645 11.8536C7.55268 11.7598 7.5 11.6326 7.5 11.5V8.70687L6.85375 9.35375C6.8073 9.40021 6.75214 9.43706 6.69145 9.4622C6.63075 9.48734 6.5657 9.50028 6.5 9.50028C6.4343 9.50028 6.36925 9.48734 6.30855 9.4622C6.24786 9.43706 6.1927 9.40021 6.14625 9.35375C6.09979 9.3073 6.06294 9.25214 6.0378 9.19145C6.01266 9.13075 5.99972 9.0657 5.99972 9C5.99972 8.9343 6.01266 8.86925 6.0378 8.80855C6.06294 8.74786 6.09979 8.6927 6.14625 8.64625L7.64625 7.14625C7.69269 7.09976 7.74783 7.06288 7.80853 7.03772C7.86923 7.01256 7.93429 6.99961 8 6.99961C8.06571 6.99961 8.13077 7.01256 8.19147 7.03772C8.25217 7.06288 8.30731 7.09976 8.35375 7.14625L9.85375 8.64625Z" fill="#161819"/>
               </svg>
+              
             </label>
 
             <input
               id="file-upload"
-              class="file-input"
+              className="file-input"
               type="file"
               accept=".eml"
               onChange={handleFileUpload}
@@ -367,7 +420,7 @@ const EmailRenderer = () => {
         {/* Display From, To, and Subject fields */}
         {fileContent && (
           <div className=" text-white p-6" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
-            {activeSection == "compare" ? <h1 className="text-xl text-center">Masked Email</h1> : null}
+            {activeSection === "compare" ? <h1 className="text-xl text-center">Masked Email</h1> : null}
 
             <div className="flex justify-between items-center border-b border-gray-700 py-2">
               <div className="flex flex-1 overflow-hidden">
@@ -429,7 +482,6 @@ const EmailRenderer = () => {
           </div>
         )}
 
-
       {/* THE BUTTONS BAR FLOATING ON THE BOTTOM OF THE SCREEN*/}
       {fileContent ? (
         <div
@@ -451,18 +503,16 @@ const EmailRenderer = () => {
         }}
       >
 
-
-
-        { postProofGeneration ? (
+        {  (proofStatus==='generated proof') ? (
           <>
           <button
             onClick={handleDownload}
-            className="button font-sans flex items-center whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
+            className="buttonBar font-sans flex items-center whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
           >
             <span className="mr-2">
             {downloadedMail ? (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-green-500 mr-2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-green-500 mr-2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" viewBox="0 0 20 20" fill="none">
@@ -482,12 +532,12 @@ const EmailRenderer = () => {
           />
           <button
             onClick={handleCopy}
-            className="button font-sans flex items-center whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
+            className="buttonBar font-sans flex items-center whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
           >
             <span className="mr-2">
               {linkCopied ? 
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-green-500">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-green-500">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               :
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" viewBox="0 0 20 20" fill="none">
@@ -502,7 +552,7 @@ const EmailRenderer = () => {
         <> 
         <button
           onClick={() => setHighlightEnabled(!highlightEnabled)}
-          className="button font-sans flex items-center whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
+          className="buttonBar font-sans flex items-center whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
         >
           <span className="mr-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-4 sm:w-6 sm:h-5 md:w-7 md:h-6" viewBox="0 0 48 24" fill="none">
@@ -524,7 +574,7 @@ const EmailRenderer = () => {
 
         <button
           onClick={() => setShowEMLPreview(!showEMLPreview)}
-          className="button font-sans whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
+          className="buttonBar font-sans whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
         >
           {(showEMLPreview )? "Show EML Preview" : "Show Raw EML"}
         </button>
@@ -538,15 +588,22 @@ const EmailRenderer = () => {
           }}
         />
           <button
-            onClick={() => setPostProofGeneration(true)}
-            className="button font-sans flex items-center whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
+            onClick={() => generateProof()}
+            className="buttonBar font-sans flex items-center whitespace-normal sm:whitespace-nowrap text-[9px] sm:text-[14px]"
           >
-          <span className="mr-2">
-            <svg xmlns="http://www.w3.org/2000/svg"     className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" viewBox="0 0 20 20" fill="none">
-              <path d="M16.7854 14.0719C16.7431 14.1425 16.6873 14.204 16.6212 14.253C16.5551 14.302 16.48 14.3375 16.4001 14.3574C16.3203 14.3773 16.2373 14.3812 16.1559 14.3689C16.0746 14.3567 15.9964 14.3285 15.926 14.2859L10.6244 11.1039V16.875C10.6244 17.0408 10.5586 17.1997 10.4414 17.3169C10.3242 17.4342 10.1652 17.5 9.99943 17.5C9.83367 17.5 9.67469 17.4342 9.55748 17.3169C9.44027 17.1997 9.37443 17.0408 9.37443 16.875V11.1039L4.0713 14.2859C4.00089 14.3292 3.92261 14.3581 3.84097 14.3709C3.75934 14.3837 3.67597 14.3801 3.5957 14.3605C3.51543 14.3409 3.43985 14.3055 3.37334 14.2565C3.30682 14.2075 3.25068 14.1458 3.20817 14.0749C3.16567 14.004 3.13763 13.9255 3.1257 13.8437C3.11376 13.7619 3.11816 13.6786 3.13863 13.5985C3.1591 13.5185 3.19525 13.4433 3.24498 13.3773C3.2947 13.3113 3.35702 13.2558 3.42833 13.2141L8.78458 10L3.42833 6.78594C3.35702 6.74418 3.2947 6.6887 3.24498 6.62271C3.19525 6.55671 3.1591 6.48151 3.13863 6.40145C3.11816 6.3214 3.11376 6.23808 3.1257 6.15631C3.13763 6.07454 3.16567 5.99595 3.20817 5.92509C3.25068 5.85423 3.30682 5.7925 3.37334 5.74348C3.43985 5.69445 3.51543 5.6591 3.5957 5.63948C3.67597 5.61985 3.75934 5.61634 3.84097 5.62914C3.92261 5.64194 4.00089 5.67081 4.0713 5.71406L9.37443 8.89609V3.125C9.37443 2.95924 9.44027 2.80027 9.55748 2.68306C9.67469 2.56585 9.83367 2.5 9.99943 2.5C10.1652 2.5 10.3242 2.56585 10.4414 2.68306C10.5586 2.80027 10.6244 2.95924 10.6244 3.125V8.89609L15.9276 5.71406C15.998 5.67081 16.0762 5.64194 16.1579 5.62914C16.2395 5.61634 16.3229 5.61985 16.4031 5.63948C16.4834 5.6591 16.559 5.69445 16.6255 5.74348C16.692 5.7925 16.7482 5.85423 16.7907 5.92509C16.8332 5.99595 16.8612 6.07454 16.8732 6.15631C16.8851 6.23808 16.8807 6.3214 16.8602 6.40145C16.8397 6.48151 16.8036 6.55671 16.7539 6.62271C16.7041 6.6887 16.6418 6.74418 16.5705 6.78594L11.2143 10L16.5705 13.2141C16.641 13.2563 16.7024 13.3119 16.7514 13.3779C16.8003 13.4438 16.8358 13.5188 16.8557 13.5984C16.8757 13.6781 16.8797 13.7609 16.8677 13.8422C16.8556 13.9234 16.8276 14.0015 16.7854 14.0719Z" fill="white"/>
-            </svg>
-          </span>
-          {postProofGeneration ? "Estimated Time: secs..." : "Generate Proof"}
+            <span className="mr-2">
+              {(proofStatus==='generating proof') ? 
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30ZM10.0251 27.0104C11.6023 27.6637 13.2928 28 15 28V15L15 2C13.2928 2 11.6023 2.33625 10.0251 2.98957C8.44788 3.64288 7.01477 4.60045 5.80761 5.80761C4.60045 7.01477 3.64288 8.44788 2.98957 10.0251C2.33626 11.6023 2 13.2928 2 15C2 16.7072 2.33625 18.3977 2.98957 19.9749C3.64288 21.5521 4.60045 22.9852 5.80761 24.1924C7.01477 25.3995 8.44788 26.3571 10.0251 27.0104Z" fill="#EAC041"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30ZM10.0251 27.0104C11.6023 27.6637 13.2928 28 15 28V15L15 2C13.2928 2 11.6023 2.33625 10.0251 2.98957C8.44788 3.64288 7.01477 4.60045 5.80761 5.80761C4.60045 7.01477 3.64288 8.44788 2.98957 10.0251C2.33626 11.6023 2 13.2928 2 15C2 16.7072 2.33625 18.3977 2.98957 19.9749C3.64288 21.5521 4.60045 22.9852 5.80761 24.1924C7.01477 25.3995 8.44788 26.3571 10.0251 27.0104Z" fill="#EAC041"/>
+              </svg>
+              :
+              <svg xmlns="http://www.w3.org/2000/svg"     className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" viewBox="0 0 20 20" fill="none">
+                <path d="M16.7854 14.0719C16.7431 14.1425 16.6873 14.204 16.6212 14.253C16.5551 14.302 16.48 14.3375 16.4001 14.3574C16.3203 14.3773 16.2373 14.3812 16.1559 14.3689C16.0746 14.3567 15.9964 14.3285 15.926 14.2859L10.6244 11.1039V16.875C10.6244 17.0408 10.5586 17.1997 10.4414 17.3169C10.3242 17.4342 10.1652 17.5 9.99943 17.5C9.83367 17.5 9.67469 17.4342 9.55748 17.3169C9.44027 17.1997 9.37443 17.0408 9.37443 16.875V11.1039L4.0713 14.2859C4.00089 14.3292 3.92261 14.3581 3.84097 14.3709C3.75934 14.3837 3.67597 14.3801 3.5957 14.3605C3.51543 14.3409 3.43985 14.3055 3.37334 14.2565C3.30682 14.2075 3.25068 14.1458 3.20817 14.0749C3.16567 14.004 3.13763 13.9255 3.1257 13.8437C3.11376 13.7619 3.11816 13.6786 3.13863 13.5985C3.1591 13.5185 3.19525 13.4433 3.24498 13.3773C3.2947 13.3113 3.35702 13.2558 3.42833 13.2141L8.78458 10L3.42833 6.78594C3.35702 6.74418 3.2947 6.6887 3.24498 6.62271C3.19525 6.55671 3.1591 6.48151 3.13863 6.40145C3.11816 6.3214 3.11376 6.23808 3.1257 6.15631C3.13763 6.07454 3.16567 5.99595 3.20817 5.92509C3.25068 5.85423 3.30682 5.7925 3.37334 5.74348C3.43985 5.69445 3.51543 5.6591 3.5957 5.63948C3.67597 5.61985 3.75934 5.61634 3.84097 5.62914C3.92261 5.64194 4.00089 5.67081 4.0713 5.71406L9.37443 8.89609V3.125C9.37443 2.95924 9.44027 2.80027 9.55748 2.68306C9.67469 2.56585 9.83367 2.5 9.99943 2.5C10.1652 2.5 10.3242 2.56585 10.4414 2.68306C10.5586 2.80027 10.6244 2.95924 10.6244 3.125V8.89609L15.9276 5.71406C15.998 5.67081 16.0762 5.64194 16.1579 5.62914C16.2395 5.61634 16.3229 5.61985 16.4031 5.63948C16.4834 5.6591 16.559 5.69445 16.6255 5.74348C16.692 5.7925 16.7482 5.85423 16.7907 5.92509C16.8332 5.99595 16.8612 6.07454 16.8732 6.15631C16.8851 6.23808 16.8807 6.3214 16.8602 6.40145C16.8397 6.48151 16.8036 6.55671 16.7539 6.62271C16.7041 6.6887 16.6418 6.74418 16.5705 6.78594L11.2143 10L16.5705 13.2141C16.641 13.2563 16.7024 13.3119 16.7514 13.3779C16.8003 13.4438 16.8358 13.5188 16.8557 13.5984C16.8757 13.6781 16.8797 13.7609 16.8677 13.8422C16.8556 13.9234 16.8276 14.0015 16.7854 14.0719Z" fill="white"/>
+              </svg>
+              }
+            </span>
+            {(proofStatus==='generating proof') ? "Estimated Time: secs..." : "Generate Proof"}
           </button>
           </>
         )}
@@ -555,7 +612,6 @@ const EmailRenderer = () => {
       </div>
 
       ) : null}
-
 
         <div
           style={{
@@ -583,9 +639,6 @@ const EmailRenderer = () => {
           )}
         </div>
       </div>
-
-
-
 
       {/* ORIGINAL EMAIL SECTION */}
       { activeSection === 'compare' &&  (
@@ -655,10 +708,7 @@ const EmailRenderer = () => {
 
       { activeSection === 'steps' ?  <div className="col-span-6 sm:col-span-2  order-first sm:order-2"> <Steps/> </div>: null }
       </div>
-      
-
-
-      
+        
   
     </div>
   );

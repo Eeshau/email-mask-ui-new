@@ -7,7 +7,7 @@ const Steps: React.FC = () => {
       <ul className="list-none max-w-md relative space-y-6 mx-auto">
         <li className="relative pl-10">
           {/* The dashed line */}
-          <div className="absolute top-0 left-3 bottom-0 border-l-2 border-dashed border-gray-700" />
+          <div className="absolute top-0 left-[13px] bottom-0 border-l-2 border-dashed border-gray-700" />
           {/* The circle bullet */}
           <span className="absolute top-0 left-2 w-3 h-3 bg-[#F5F3EF] rounded-full"></span>
           <p>UPLOAD .EML FILE</p>
@@ -18,7 +18,7 @@ const Steps: React.FC = () => {
         </li>
 
         <li className="relative pl-10">
-          <div className="absolute top-0 left-3 bottom-0 border-l-2 border-dashed border-gray-700" />
+          <div className="absolute top-0 left-[13px] bottom-0 border-l-2 border-dashed border-gray-700" />
           <span className="absolute top-0 left-2 w-3 h-3 bg-[#F5F3EF] rounded-full"></span>
           <p>SELECT TEXT TO HIDE</p>
           <ul className="mt-2 ml-6 text-gray-400">
@@ -28,7 +28,7 @@ const Steps: React.FC = () => {
         </li>
 
         <li className="relative pl-10">
-          <div className="absolute top-0 left-3 bottom-0 border-l-2 border-dashed border-gray-700" />
+          <div className="absolute top-0 left-[13px] bottom-0 border-l-2 border-dashed border-gray-700" />
           <span className="absolute top-0 left-2 w-3 h-3 bg-[#F5F3EF] rounded-full"></span>
           <p>RECLICK TO SHOW AGAIN</p>
           <ul className="mt-2 ml-6 text-gray-400">
@@ -38,7 +38,7 @@ const Steps: React.FC = () => {
         </li>
 
         <li className="relative pl-10">
-          <div className="absolute top-0 left-3 bottom-0 border-l-2 border-dashed border-gray-700" />
+          <div className="absolute top-0 left-[13px] bottom-0 border-l-2 border-dashed border-gray-700" />
           <span className="absolute top-0 left-2 w-3 h-3 bg-[#F5F3EF] rounded-full"></span>
           <p>GENERATE PROOF</p>
           <ul className="mt-2 ml-6 text-gray-400">
@@ -48,7 +48,7 @@ const Steps: React.FC = () => {
         </li>
 
         <li className="relative pl-10">
-          <div className="absolute top-0 left-3 bottom-0 border-l-2 border-dashed border-gray-700" />
+          <div className="absolute top-0 left-[13px] bottom-0 border-l-2 border-dashed border-gray-700" />
           <span className="absolute top-0 left-2 w-3 h-3 bg-[#F5F3EF] rounded-full"></span>
           <p>DOWNLOAD MAIL</p>
           <ul className="mt-2 ml-6 text-gray-400">
@@ -57,7 +57,7 @@ const Steps: React.FC = () => {
         </li>
 
         <li className="relative pl-10">
-          <div className="absolute top-0 left-3" />
+          <div className="absolute top-0 left-[13px]" />
           <span className="absolute top-0 left-2 w-3 h-3 bg-[#F5F3EF] rounded-full"></span>
           <p>SHARE VERIFICATION LINK</p>
           <ul className="mt-2 ml-6 text-gray-400">

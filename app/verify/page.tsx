@@ -148,8 +148,8 @@ export default function Verify() {
               placeholder="Paste your proof here"
               className="textarea-floating px-[20px] py-[10px] mt-[10px] text-[10px] sm:text-[14px]"
             />
-            <button className="buttonLight w-full" onClick={analyzeProof}>Verify</button>
-          </div>
+            <button className="buttonLight w-full " onClick={analyzeProof}>Verify</button>
+          </div> 
       
           {/* VERIFIED EMAIL PARTS */}
           {verified ? 
@@ -179,7 +179,7 @@ export default function Verify() {
           : <></>}
       
           {/* HOW VERIFYING AN EMAIL WORKS STEPS */}
-          <div className="my-20">
+          <div className="my-20 px-[20px]">
             <h1 className="text-2xl text-white">How it works</h1>
             <ol className="text-white list-decimal list-inside">
               <li>Paste the proof in the input above and click &quot;Verify&quot;.</li>
