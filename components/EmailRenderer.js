@@ -15,6 +15,10 @@ const escapeRegExp = (string) => {
 
 
 const EmailRenderer = () => {
+  // for checking if user is on mobile instead of desktop
+  const [isMobile, setIsMobile] = useState(true);
+    const [showOverlay, setShowOverlay] = useState(true);
+
   // States for actual email content
   const [emailBody, setEmailBody] = useState("");
   const { fileContent, setFileContent } = useContext(FileContext);
@@ -148,6 +152,13 @@ const EmailRenderer = () => {
       document.removeEventListener("mouseup", handleSelection);
     };
   }, [highlightEnabled]);
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    if (/android|iPhone|iPad|iPod/i.test(userAgent)) {
+      setIsMobile(true);
+    }
+  }, []);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -355,9 +366,50 @@ const EmailRenderer = () => {
   getCombinedRegex(highlightedTextBody.concat(highlightedTextMeta))
 
 
+
   return (
     <div className="p-[20px]">
-
+      {isMobile && showOverlay && (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            margin: "auto",
+            width: "90%",
+            height: "90%",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            fontSize: "1.5rem",
+            textAlign: "center",
+            padding: "1rem",
+            borderRadius: "12px",
+          }}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setShowOverlay(false)}
+            style={{
+              position: "absolute",
+              top: "15px",
+              right: "25px",
+              backgroundColor: "transparent",
+              border: "none",
+              color: "#fff",
+              fontSize: "1.2rem",
+              cursor: "pointer",
+            }}
+          >
+            &times;
+          </button>
+          Generating an email masking proof works best on desktop!
+        </div>
+      )}
     <NavBar
         mode='prove'
         onCompareChanges={handleCompareChanges}
