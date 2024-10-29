@@ -16,7 +16,7 @@ const escapeRegExp = (string) => {
 
 const EmailRenderer = () => {
   // for checking if user is on mobile instead of desktop
-  const [isMobile, setIsMobile] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
     const [showOverlay, setShowOverlay] = useState(true);
 
   // States for actual email content
@@ -377,8 +377,8 @@ const EmailRenderer = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             margin: "auto",
-            width: "90%",
-            height: "90%",
+            width: "100%",
+            height: "100%",
             backgroundColor: "rgba(0, 0, 0, 0.8)",
             color: "#fff",
             display: "flex",

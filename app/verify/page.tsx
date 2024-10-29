@@ -148,7 +148,7 @@ export default function Verify() {
               placeholder="Paste your proof here"
               className="textarea-floating px-[20px] py-[10px] mt-[10px] text-[10px] sm:text-[14px]"
             />
-            <button className="buttonLight  " onClick={analyzeProof}>Verify</button>
+            <button className="buttonLight" style={{ alignSelf: "flex-start" }} onClick={analyzeProof}>Verify</button>
           </div> 
       
           {/* VERIFIED EMAIL PARTS */}
