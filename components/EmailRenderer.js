@@ -417,6 +417,7 @@ const EmailRenderer = () => {
         onChangeEmail={handleChangeEmail}
         onViewSteps={handleViewSteps}
         activeSection={activeSection}
+        fileContent={fileContent}
     />
 
       <div
@@ -468,9 +469,10 @@ const EmailRenderer = () => {
 
       <div className="grid grid-cols-6 gap-4 w-full h-full font-sans "> 
         {/* MASKED EMAIL SECTION */}
+        {fileContent && (
         <div className={ `text-[12px] sm:text-[14px] border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] rounded-[12px]  ${activeSection === 'compare' ? 'col-span-6 sm:col-span-3' : activeSection === 'change' ? 'col-span-6' : activeSection === 'steps' ? 'col-span-6 sm:col-span-4' : activeSection === 'reset' ? 'col-span-6' : ''}`}>
         {/* Display From, To, and Subject fields */}
-        {fileContent && (
+
           <div className=" text-white p-6" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
             {activeSection === "compare" ? <h1 className="text-xl text-center">Masked Email</h1> : null}
 
@@ -532,7 +534,7 @@ const EmailRenderer = () => {
               <label>Body:</label>
             </div>
           </div>
-        )}
+        
 
       {/* THE BUTTONS BAR FLOATING ON THE BOTTOM OF THE SCREEN*/}
       {fileContent ? (
@@ -692,6 +694,8 @@ const EmailRenderer = () => {
         </div>
       </div>
 
+      )}
+
       {/* ORIGINAL EMAIL SECTION */}
       { activeSection === 'compare' &&  (
       <div className="text-[12px]  sm:text-[14px] col-span-6 sm:col-span-3 border border-[0.5px] border-solid border-[#3B3B3B] bg-[#161819] rounded-[12px]">
@@ -758,7 +762,8 @@ const EmailRenderer = () => {
       )}
       
 
-      { activeSection === 'steps' ?  <div className="col-span-6 sm:col-span-2  order-first sm:order-2"> <Steps/> </div>: null }
+      { activeSection === 'steps'  ?  <div       className={`col-span-6 ${fileContent ? 'sm:col-span-2' : 'sm:col-span-6'} order-first sm:order-2`}> <Steps/> </div>: null }
+
       </div>
         
   
