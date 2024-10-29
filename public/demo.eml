@@ -1,0 +1,143 @@
+Delivered-To: 0xsachink@gmail.com
+Received: by 2002:a59:ac50:0:b0:48e:ba2f:7de2 with SMTP id x16csp2122177vqg;
+        Mon, 30 Sep 2024 14:17:27 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IERCdD6l9JXXNHZ7EjJq7ltL3M1wO75Eg/iXtWYegxn+j3bDt/vvz6ka9wMcCKsQQ0oOtUt
+X-Received: by 2002:a05:6a00:13a9:b0:718:d5f4:6e95 with SMTP id d2e1a72fcca58-71b25efed6dmr20105341b3a.3.1727731047440;
+        Mon, 30 Sep 2024 14:17:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1727731047; cv=none;
+        d=google.com; s=arc-20240605;
+        b=i4D0foU5BJDjmz24chLhrQRwTRwz+qVlKaYeEVgNXOddgultv84jsEULSRYgAfosS8
+         bDMnYTVaMrOshxDP46VnYCB72KAhMjjaoMzKUXn7LlgqKmhwlpHSzR8PZnZip1ksaDno
+         C+35zpM2yEblWIOgGoglpVyp2nGwf+XC4yVIse+1gFwbA7iDq5Ohig42ioWRyqweTafL
+         asLawucvBnC7gpCyt3xgbv5ev2Duk/ycKAu5kNQNuVMtl/1B3pHveplHrPCUqDuh5IDh
+         mc29JIzFuTP826p1Kq2GB37HdIRzFdB02jAJ2oWFKSUM3YfsRBa5Tfir/5sfuxP3Z+fL
+         CSPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=feedback-id:message-id:date:reply-to:cc:to:from:subject
+         :mime-version:dkim-signature:dkim-signature;
+        bh=Xhu47HMjYfs6YhlGb0dbvpIWT1HURZBWmXKmOMUVwyE=;
+        fh=fOJtAFz3okCpTov9t3TS0Xb0VrZvPgYAvcO9ihH85RQ=;
+        b=LaCeo3PZF+CDaf+w0+pXfHhrOlBTYMUz8N52pAETLw68yM5pKnNOxH2NZpLVX3OPtn
+         FllftaX543YCezVbhtcxgFJIiYubunAzS5AOUHxt/q6nlfYIJGfED3NFY09NLtIL+Xzh
+         ja4OeTqbJtlvz/pDAO8BeXmrWsHadjFQNrnt5y2hLaTExY3EPfeh8BcWFyOExDwRU3Vm
+         qRjhiN3YD5HTOb+c5k14pAG/gaqn7L8LsQFNvLmn/3uwLIpmzBAnMBD3BfAqpoLOSDvt
+         4tLFhkF/gjHdSr7wDcyPdTlCyjv0z4ukXxRUyKOqclgYxJgCspwkJXVtzPg190iCv+dh
+         tZzg==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@devcon.org header.s=kh3h37a2jhlhfkth4f6smd3zlfz4sffz header.b=RJXYNXaQ;
+       dkim=pass header.i=@amazonses.com header.s=7v7vs6w47njt4pimodk5mmttbegzsi6n header.b=teVfPJtp;
+       spf=pass (google.com: domain of 0101019244cb9a71-3e274552-f7a1-49cf-89af-09dfc9d870d9-000000@email.devcon.org designates 54.240.27.59 as permitted sender) smtp.mailfrom=0101019244cb9a71-3e274552-f7a1-49cf-89af-09dfc9d870d9-000000@email.devcon.org;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=devcon.org
+Return-Path: <0101019244cb9a71-3e274552-f7a1-49cf-89af-09dfc9d870d9-000000@email.devcon.org>
+Received: from a27-59.smtp-out.us-west-2.amazonses.com (a27-59.smtp-out.us-west-2.amazonses.com. [54.240.27.59])
+        by mx.google.com with ESMTPS id d2e1a72fcca58-71b264868f0si9303619b3a.24.2024.09.30.14.17.27
+        for <0xsachink@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Sep 2024 14:17:27 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 0101019244cb9a71-3e274552-f7a1-49cf-89af-09dfc9d870d9-000000@email.devcon.org designates 54.240.27.59 as permitted sender) client-ip=54.240.27.59;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@devcon.org header.s=kh3h37a2jhlhfkth4f6smd3zlfz4sffz header.b=RJXYNXaQ;
+       dkim=pass header.i=@amazonses.com header.s=7v7vs6w47njt4pimodk5mmttbegzsi6n header.b=teVfPJtp;
+       spf=pass (google.com: domain of 0101019244cb9a71-3e274552-f7a1-49cf-89af-09dfc9d870d9-000000@email.devcon.org designates 54.240.27.59 as permitted sender) smtp.mailfrom=0101019244cb9a71-3e274552-f7a1-49cf-89af-09dfc9d870d9-000000@email.devcon.org;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=devcon.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kh3h37a2jhlhfkth4f6smd3zlfz4sffz; d=devcon.org; t=1727731047;
+	h=Content-Type:MIME-Version:Subject:From:To:Cc:Reply-To:Date:Message-ID;
+	bh=gmTJwCa0D10aPGF6PKkEIdSdQ1z1qVDaAFzCr/Mx7IY=;
+	b=RJXYNXaQqzA51kv8b0i0OOMcCZ4L3hZt/ke3FvnE7Qeqg30u+VtXnbMOfyUHe41c
+	RNqzvXTQJdAPsUss9KJ5ryTaqrUGsDKohgsfyFLgmx+VISUIyLHVBCyIV0Bg3WGGYrG
+	eBqpmYtxFhzcwXTSMwndNWxqUSGVtJMYQT5JSxC8=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=7v7vs6w47njt4pimodk5mmttbegzsi6n; d=amazonses.com; t=1727731047;
+	h=Content-Type:MIME-Version:Subject:From:To:Cc:Reply-To:Date:Message-ID:Feedback-ID;
+	bh=gmTJwCa0D10aPGF6PKkEIdSdQ1z1qVDaAFzCr/Mx7IY=;
+	b=teVfPJtpTkoSPnuLDcyd/si/+w58G+Hs4YzbpVoqcVnHXe8YbHGouLSWu9c0YL0R
+	TTLmNYc026IpTd/PV8NVk8/tJW7GUHiEC9TFcA2MTkCIKUuSjm8esR9AzhqgJDE6U0P
+	zM/97J7nxgVolPUEEzYIlle6W1giPQ3b1GYfYwb8=
+Content-Type: multipart/alternative;
+ boundary="===============8839486460141876131=="
+MIME-Version: 1.0
+Subject: Update on your Devcon proposal: Building verifiable P2P marketplaces
+ using
+ zkTLS
+From: Devcon 7 SEA <speak@devcon.org>
+To: 0xsachink@gmail.com
+Cc: 
+Reply-To: speak@devcon.org
+Date: Mon, 30 Sep 2024 21:17:27 +0000
+Message-ID: <0101019244cb9a71-3e274552-f7a1-49cf-89af-09dfc9d870d9-000000@us-west-2.amazonses.com>
+Feedback-ID: ::1.us-west-2.ahHCdjCvZMZIHkDavYoF1OYpoqRAjSPDXzbmgiyNRn4=:AmazonSES
+X-SES-Outgoing: 2024.09.30-54.240.27.59
+
+--===============8839486460141876131==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+Hi 0xsachink,
+
+Thank you for taking the time to submit your proposal "*Building verifiable P2P marketplaces using zkTLS*", for [Devcon](https://devcon.org/) this year. After a thorough review process involving over 90 community reviewers, we regret to inform you that we were unable to accept this submission.
+
+With close to 3,000 proposals and limited capacity, we could only accommodate a fraction of the great submissions we received. We hope you understand.
+
+We would still love to see you join us at Devcon if you are able. And keep in mind that there will be multiple ways to take part in Devcon beyond attending/speaking, including participating in publicly-available Discussion Corners, booking Meeting Rooms (details to be posted closer to Devcon), contributing to one of the [14 Community Hubs](https://forum.devcon.org/t/introducing-the-14-devcon-sea-community-hubs/4428), and more.
+
+Hope to see you at Devcon.
+
+Sincerely,
+
+The Devcon Team
+--===============8839486460141876131==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html><html><head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=false">
+    </head>
+    
+    <body style="background-color: #eee;background-position: top;background-repeat: repeat-x;font-family: 'Open Sans', 'OpenSans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 16px;line-height: 22px;color: #333;margin: 0;padding-top: 20px;">
+        <table class="layout" width="600" cellspacing="0" border="0" style="background: white;max-width: 600px;width: 100%;border-spacing: 0px;border-collapse: separate;margin: auto;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;-ms-word-break: break-all;-ms-hyphens: auto;-moz-hyphens: auto;-webkit-hyphens: auto;hyphens: auto;">
+            <tbody><tr>
+                <td class="header" align="center" background="" style="text-align: center;">
+                    
+                        <h2 style="margin-top: 20px;margin-bottom: 10px;font-size: 22px;line-height: 26px;"><a href="https://speak.devcon.org/devcon7-sea/" target="_blank" rel="noopener" style="color: #8A4FF6;font-weight: bold;text-decoration: none;">Devcon 7 SEA</a></h2>
+                    
+                    
+                        <h1 style="margin-top: 0px;font-size: 26px;line-height: 30px;">Update on your Devcon proposal: Building verifiable P2P marketplaces using zkTLS</h1>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="containertd">
+                    <div class="content" style="padding: 20px 28px 0 28px;">
+                        <p style="margin: 0 0 10px;">Hi 0xsachink,</p>
+<p style="margin: 0 0 10px;">Thank you for taking the time to submit your proposal "<em>Building verifiable P2P marketplaces using zkTLS</em>", for <a href="https://devcon.org/" rel="nofollow" style="color: #8A4FF6;font-weight: bold;">Devcon</a> this year. After a thorough review process involving over 90 community reviewers, we regret to inform you that we were unable to accept this submission.</p>
+<p style="margin: 0 0 10px;">With close to 3,000 proposals and limited capacity, we could only accommodate a fraction of the great submissions we received. We hope you understand.</p>
+<p style="margin: 0 0 10px;">We would still love to see you join us at Devcon if you are able. And keep in mind that there will be multiple ways to take part in Devcon beyond attending/speaking, including participating in publicly-available Discussion Corners, booking Meeting Rooms (details to be posted closer to Devcon), contributing to one of the <a href="https://forum.devcon.org/t/introducing-the-14-devcon-sea-community-hubs/4428" rel="nofollow" style="color: #8A4FF6;font-weight: bold;">14 Community Hubs</a>, and more.</p>
+<p style="margin: 0 0 10px;">Hope to see you at Devcon.</p>
+<p style="margin: 0 0 10px;">Sincerely,</p>
+<p style="margin: 0 0 10px;">The Devcon Team</p>
+                    </div>
+                </td>
+            </tr>
+            
+                <tr class="last" style="height: 40px;"></tr>
+            
+        </tbody></table>
+        <div class="footer" style="padding: 10px;text-align: center;font-size: 12px;">
+            
+
+
+    powered by <a href="https://pretalx.com" target="_blank" rel="noopener" style="color: #8A4FF6;font-weight: bold;">pretalx</a>
+
+
+        </div>
+        <br>
+        <br>
+    
+
+</body></html>
+--===============8839486460141876131==--
