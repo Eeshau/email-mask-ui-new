@@ -684,7 +684,8 @@ const EmailRenderer = () => {
             height: "50vh",
             margin: "1rem",
             overflowY: 'scroll',
-            backgroundColor: "#F6F8FA",
+            backgroundColor: showEMLPreview ? "#0a0a0a" : "#F6F8FA",
+            borderRadius: 5,
           }}
         >
           {showEMLPreview && bhContent ? (
@@ -753,7 +754,8 @@ const EmailRenderer = () => {
             height: "50vh",
             margin: "1rem",
             overflowY: 'scroll',
-            backgroundColor: "#F6F8FA",
+            backgroundColor: showEMLPreview ? "#0a0a0a" : "#F6F8FA",
+            borderRadius: 5,
           }}
         >
           {showEMLPreview && bhContent ? (
