@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="font-fustat">
+      <body className="font-fustat bg-[#0F1112]">
         <FileProvider>
           {children}
         </FileProvider>

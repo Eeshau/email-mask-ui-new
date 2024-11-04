@@ -23,7 +23,7 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'var(--font-space-grotesk)', sans-serif; /* Removed Arial fallback */
+  font-family: 'var(--font-space-grotesk)', sans-serif;
 }
 
 

@@ -186,7 +186,16 @@ const EmailRenderer = () => {
 
   // Function to process email body and inject the background color style
   const processEmailBody = (content) => {
-    const style = '<style>.gmail-actual-text { background-color: #F6F8FA !important; }</style>';
+    // const style = '<style>.gmail-actual-text { background-color: #F6F8FA !important; }</style>';
+    const style =     `<style>
+    /* Scope background styling only to the email body container */
+    .email-content-wrapper .email-body-container, 
+    .email-content-wrapper .gmail-actual-text {
+      background-color: #F6F8FA !important;
+      padding: 20px;
+    }
+  </style>`;
+
     return style + content;
   };
 
@@ -668,28 +677,32 @@ const EmailRenderer = () => {
       ) : null}
 
         <div
+        className="email-content-wrapper"
           style={{
             display: "flex",
             flexDirection: "row",
             height: "50vh",
             margin: "1rem",
-            overflowY: 'scroll'
+            overflowY: 'scroll',
+            backgroundColor: "#F6F8FA",
           }}
         >
           {showEMLPreview && bhContent ? (
+            // RAW EML CONTENT
             <div style={styles.rawContent} className="text-white">
               <h2>Content used for bh</h2>
-
               <pre>{getHighlightedContent(bhContent, highlightedTextBody.concat(highlightedTextMeta))}</pre>
             </div>
           ) : (
-            <div
-              style={styles.emailbody}
-              dangerouslySetInnerHTML={{
-                __html: getHighlightedContentHTML(emailBody),
-              }}
-              className="email-body-container"
-            />
+            // EML PREVIEW EMAIL BODY
+              <div 
+                style={styles.emailbody}
+
+                dangerouslySetInnerHTML={{
+                  __html: getHighlightedContentHTML(emailBody),
+                }}
+                className="email-body-container"
+              />
           )}
         </div>
       </div>
@@ -733,28 +746,32 @@ const EmailRenderer = () => {
         )}
 
         <div
+          className="email-content-wrapper"
           style={{
             display: "flex",
             flexDirection: "row",
             height: "50vh",
             margin: "1rem",
-            overflowY: 'scroll'
+            overflowY: 'scroll',
+            backgroundColor: "#F6F8FA",
           }}
         >
           {showEMLPreview && bhContent ? (
+            // RAW EML CONTENT
             <div style={styles.rawContent} className="text-white">
               <h2>Content used for bh</h2>
 
               <pre>{bhContent}</pre>
             </div>
           ) : (
-            <div
-            style={styles.emailbody}
-            dangerouslySetInnerHTML={{
-              __html: emailBody,
-            }}
-            className="email-body-container"
-          />
+            // EML PREVIEW EMAIL BODY
+              <div
+              style={styles.emailbody}
+              dangerouslySetInnerHTML={{
+                __html: emailBody,
+              }}
+              className="email-body-container"
+            />
           )}
         </div>
         
