@@ -212,11 +212,11 @@ const EmailRenderer = () => {
 
       if (!from || !to || !subject) {
         const fromMatch = emlContent.match(/^From:\s.*<([^>]+)>/m);
-        const toMatch = emlContent.match(/^To:\s.*<([^>]+)>/m);
+        const toMatch = emlContent.match(/^\s*(?:To|Delivered-To):\s*(?:.*?<([^>]+)>|(.+))/m);
         const subjectMatch = emlContent.match(/^Subject:\s*(.*)/m);
 
         setFromEmail(fromMatch ? fromMatch[1] : 'Unknown');
-        setToEmail(toMatch ? toMatch[1] : 'Unknown');
+        setToEmail(toMatch ? toMatch[1] || toMatch[2] : 'Unknown');
         setSubject(subjectMatch ? subjectMatch[1] : 'Unknown');
       } else {
         setFromEmail(from || 'Unknown');
