@@ -284,25 +284,22 @@ const EmailRenderer = () => {
 
 
 
-  const getHighlightedContentHTML = (content) => {
-    // Inject the style to set the background color if unset, handles case that email has no background color
-    const style = '<style>.gmail-actual-text { background-color: #F6F8FA !important; }</style>';
-    let highlightedContent = style + content;
-
-    if (highlightedTextBody.length === 0) return highlightedContent;
-
-    highlightedTextBody.forEach((text) => {
+  const getHighlightedContentHTML = (highlightedContent) => {
+    const allHighlightedText = [...highlightedTextBody, ...highlightedTextMeta];
+    if (allHighlightedText.length === 0) return highlightedContent;
+  
+    allHighlightedText.forEach((text) => {
       // Match the highlighted text only if it's not inside HTML tags
-      const regex = new RegExp(`(?!<[^>]*?)(${text})(?![^<]*?>)`, "gi");
+      const regex = new RegExp(`(?!<[^>]*?)(${escapeRegExp(text)})(?![^<]*?>)`, "gi");
       highlightedContent = highlightedContent.replace(
         regex,
         '<span class="highlightBody">$1</span>'
       );
     });
-
+  
     return highlightedContent;
   };
-
+  
 
   //Generate proof
   const generateProof = () => {
