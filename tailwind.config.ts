@@ -13,12 +13,10 @@ const config: Config = {
         fustat: ['"Fustat"', 'sans-serif'], // Manually added Fustat
         newsreader: ['var(--font-newsreader)', 'serif'],
       },
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
     },
   },
-  plugins: [],
+  plugins: [
+    
+  ],
 };
 export default config;

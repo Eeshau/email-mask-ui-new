@@ -184,7 +184,8 @@ const EmailRenderer = () => {
     // extractBhValue(content); // Uncomment if needed
   };
 
-  // Function to process email body and inject the background color style
+
+  // FUNCTION TO ADD BACKGROUND COLOR
   const processEmailBody = (content) => {
     // const style = '<style>.gmail-actual-text { background-color: #F6F8FA !important; }</style>';
     const style =     `<style>
@@ -199,6 +200,8 @@ const EmailRenderer = () => {
     return style + content;
   };
 
+
+  //PARSES EML TO GRAB THE TO, FROM, SUBJECT VALUES
   const parseEml = async (emlContent) => {
     const parser = new PostalMime();
     let parsedEmail;
