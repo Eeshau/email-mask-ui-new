@@ -17,7 +17,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="[forced-color-adjust:none]" >
+    <html lang="en"  className={newsreader.variable} >
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&family=Newsreader&display=swap"
