@@ -205,19 +205,21 @@ const EmailRenderer = () => {
   const parseEml = async (emlContent) => {
     const parser = new PostalMime();
     let parsedEmail;
-
+  
     try {
       parsedEmail = await parser.parse(emlContent);
-
+  
+      // Extract TO, FROM, SUBJECT values
       const from = parsedEmail?.from?.value?.[0]?.address;
       const to = parsedEmail?.to?.value?.[0]?.address;
       const subject = parsedEmail?.subject;
-
+  
       if (!from || !to || !subject) {
+        // Fallback to regex if values are not present in parsedEmail
         const fromMatch = emlContent.match(/^From:\s.*<([^>]+)>/m);
         const toMatch = emlContent.match(/^\s*(?:To|Delivered-To):\s*(?:.*?<([^>]+)>|(.+))/m);
         const subjectMatch = emlContent.match(/^Subject:\s*(.*)/m);
-
+  
         setFromEmail(fromMatch ? fromMatch[1] : 'Unknown');
         setToEmail(toMatch ? toMatch[1] || toMatch[2] : 'Unknown');
         setSubject(subjectMatch ? subjectMatch[1] : 'Unknown');
@@ -226,25 +228,57 @@ const EmailRenderer = () => {
         setToEmail(to || 'Unknown');
         setSubject(subject || 'Unknown');
       }
-
-      // Process the email body to inject the background color style
+  
+      // Process the email body for UI display
       if (parsedEmail.html) {
         setEmailBody(processEmailBody(parsedEmail.html));
       } else {
         setEmailBody(parsedEmail.text || "No body content found");
       }
-
+  
+      // Extract and canonicalize DKIM signature and headers
+      const dkimSignature = emlContent.match(/^DKIM-Signature:.*(\r?\n\s+.+)*/gm)?.[0] || '';
+  
+      // Define required headers for DKIM signature (per canonicalization rules)
+      const requiredHeaders = ['Date', 'From', 'To', 'Subject', 'MIME-Version', 'Content-Type', 'Message-ID'];
+      const canonicalizedHeaders = requiredHeaders
+        .map((header) => {
+          const match = emlContent.match(new RegExp(`^${header}:.*`, 'm'));
+          return match ? match[0].toLowerCase().trim() : null;
+        })
+        .filter(Boolean)
+        .join('\r\n');
+  
+      // Canonicalize body (using text/plain part for DKIM signing)
+      let canonicalizedBody = parsedEmail.text || 'No body content found';
+      canonicalizedBody = canonicalizedBody
+        .replace(/[\t ]+(\r?\n)/g, '$1')  // Remove trailing spaces from lines
+        .replace(/\r?\n$/, '\r\n')        // Ensure single newline at end
+        .trim();
+  
+      // Build minimal EML content with canonicalized DKIM parts
+      const minimalEmlContent = [
+        dkimSignature,
+        canonicalizedHeaders,
+        '',
+        canonicalizedBody
+      ].join('\r\n\r\n');
+  
+      // Output the minimal EML content
+      setBhContent(minimalEmlContent); // Set to a state variable for further processing if needed
+      // setEmailBody(canonicalizedBody);  // Optionally set for UI display
+  
     } catch (error) {
       console.error("Error parsing EML file with PostalMime:", error);
-
+  
       const fromMatch = emlContent.match(/^From:\s.*<([^>]+)>/m);
       const toMatch = emlContent.match(/^To:\s.*<([^>]+)>/m);
       const subjectMatch = emlContent.match(/^Subject:\s*(.*)/m);
-
+  
       setFromEmail(fromMatch ? fromMatch[1] : 'Unknown');
       setToEmail(toMatch ? toMatch[1] : 'Unknown');
       setSubject(subjectMatch ? subjectMatch[1] : 'Unknown');
-
+  
       setEmailBody("No body content found");
     }
   };
