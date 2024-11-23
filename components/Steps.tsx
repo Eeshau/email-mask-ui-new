@@ -44,7 +44,7 @@ const Steps: React.FC = () => {
             style={{ bottom: "-1.5rem" }}
           />
           <span className="absolute top-0 left-2 w-3 h-3 bg-[#F5F3EF] rounded-full"></span>
-          <p>RECLICK TO SHOW AGAIN</p>
+          <p>REHIGHLIGHT TO SHOW AGAIN</p>
           <ul className="mt-2 ml-6 text-gray-400">
             <li>— Click on any erased part to show again</li>
             <li>— Repeat it until satisfied</li>
