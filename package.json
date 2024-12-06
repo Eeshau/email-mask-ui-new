@@ -11,7 +11,7 @@
   "dependencies": {
     "@next/font": "^14.2.13",
     "@zk-email/helpers": "^6.2.0",
-    "@zk-email/sdk": "^0.0.40",
+    "@zk-email/sdk": "^0.0.60",
     "@zk-email/zk-email-sdk": "^1.0.5",
     "crypto-browserify": "^3.12.0",
     "framer-motion": "^11.11.8",
